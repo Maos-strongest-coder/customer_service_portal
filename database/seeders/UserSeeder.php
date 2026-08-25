@@ -15,20 +15,19 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::factory()
-            ->count(10)
+            ->count(3)
+            ->admin()
             ->create();
 
         User::factory()
-            ->count(5)
-            ->create(['role' => 'admin']);
+            ->count(15)
+            ->user()
+            ->create();
             
-        User::factory()
-            ->count(1)
-            ->create([
-                'name' => 'Test Admin',
-                'email' => 'admin@example.com',
-                'password' => Hash::make('password'),
-                'role' => 'admin',
-            ]);  
+        User::factory()->admin()->create([
+            'first_name' => 'Admin',
+            'last_name' => 'Tester',
+            'email' => 'admin@test.com',
+        ]);
     }
 }

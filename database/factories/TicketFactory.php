@@ -22,8 +22,8 @@ class TicketFactory extends Factory
             'title' => fake()->sentence(),
             'category' => fake()->word(),
             'status' => fake()->randomElement(['open', 'started', 'closed']),
-            'issued_by' => User::factory(['role' => 'user']),
-            'issued_to' => User::factory(['role' => 'admin']),
+            'issued_by' => User::factory()->user(),
+            'issued_to' => User::factory()->admin(),
         ];
     }
 }

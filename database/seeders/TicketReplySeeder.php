@@ -8,7 +8,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use App\Models\TicketReply;
 
-class TicketReviewSeeder extends Seeder
+class TicketReplySeeder extends Seeder
 {
     /**
      * Run the database seeds.

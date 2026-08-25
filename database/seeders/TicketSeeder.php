@@ -14,11 +14,18 @@ class TicketSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::all();
+        $users = User::where('role', 'user')->get();
+        $adminUsers = User::where('role', 'admin')->get();
 
         Ticket::factory()
             ->count(20)
-            ->recycle($users)
-            ->create();
+            ->create([
+                'issued_by' => function () use ($users) {
+                    return $users->random()->id;
+                },
+                'issued_to' => function () use ($adminUsers) {
+                    return $adminUsers->random()->id;
+                },
+            ]);
     }
 }
