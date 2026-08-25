@@ -9,13 +9,14 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['first_name', 'last_name', 'email', 'phone_number', 'role'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * Get the attributes that should be cast.
@@ -29,4 +30,24 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+     protected $fillable = [
+        'first_name',
+        'last_name',
+        'email',
+        'phone_number',
+        'password',
+        'role'
+    ];
+
+    protected $hidden = [
+        'password',
+    ];
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
+
 }
