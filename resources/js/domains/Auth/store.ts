@@ -1,5 +1,5 @@
 import {storeModuleFactory} from '../../factories/storeFactory';
-import {Http} from '../../facades/httpFacade';
+import {Http} from '../../facades/http';
 import axios from 'axios';
 
 export const authStore = storeModuleFactory('auth');
