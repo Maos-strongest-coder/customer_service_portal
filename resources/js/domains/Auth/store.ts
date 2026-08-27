@@ -8,7 +8,7 @@ authStore.actions.login = async credentials => {
     await Http.get('/sanctum/csrf-cookie', {withCredentials: true});
     const response = await Http.post('login', credentials);
 
-    const data = response.data;
+    const data = response;
 
     if (!data) return;
 

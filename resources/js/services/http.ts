@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { destroyErrors, destroyMessage, setErrorBag, setMessage } from './error';
+import {destroyErrors, destroyMessage, setErrorBag, setMessage} from './error';
 
 const http = axios.create({
     baseURL: '/api',

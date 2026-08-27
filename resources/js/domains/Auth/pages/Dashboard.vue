@@ -10,17 +10,15 @@
 <script setup>
 import {ref} from 'vue';
 import {authStore} from '../store';
-import {Navigation} from '../../../facades/routerFacade';
+import {Navigation} from '../../../facades/router';
 
-const currentUser = ref(null);
+const currentUser = ref();
 
 const loadCurrentUser = async () => {
     const user = await authStore.actions.me();
     if (user) {
         currentUser.value = user.first_name;
     } else {
-        currentUser.value = null;
-
         Navigation.toPath('/');
     }
 };

@@ -1,4 +1,5 @@
 import {ref, computed} from 'vue';
+import {Http} from '../facades/http';
 
 export const storeModuleFactory = (moduleName: string) => {
     const state = ref<Record<string | number, any>>({});
@@ -33,6 +34,7 @@ export const storeModuleFactory = (moduleName: string) => {
     const actions = {
         getAll: async () => {
             const data = await Http.get(`/${moduleName}`);
+            console.log('Ruwe API data voor', moduleName, ':', data);
             if (!data) return;
             setters.setAll(data);
         },
