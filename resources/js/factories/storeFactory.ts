@@ -1,5 +1,4 @@
-import { ref, computed } from 'vue';
-import { Http } from '../facades/httpFacade'
+import {ref, computed} from 'vue';
 
 export const storeModuleFactory = (moduleName: string) => {
     const state = ref<Record<string | number, any>>({});
@@ -26,7 +25,7 @@ export const storeModuleFactory = (moduleName: string) => {
             state.value[item.id] = Object.freeze(item);
         },
 
-        deleteByItem: (item: { id: string | number }) => {
+        deleteByItem: (item: {id: string | number}) => {
             delete state.value[item.id];
         },
     };
@@ -52,9 +51,9 @@ export const storeModuleFactory = (moduleName: string) => {
 
         delete: async (id: string | number) => {
             await Http.delete(`/${moduleName}/${id}`);
-            setters.deleteByItem({ id });
+            setters.deleteByItem({id});
         },
     };
 
-    return { getters, setters, actions };
+    return {getters, setters, actions};
 };
