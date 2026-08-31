@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Traits\FormatsDates;
 
 class TicketResource extends JsonResource
 {
@@ -19,8 +20,11 @@ class TicketResource extends JsonResource
             'title' => $this->title,
             'category' => $this->category,
             'status' => $this->status,
-            'issued_by' => $this->issued_by,
-            'issued_to' => $this->issued_to,
+            'issued_by' => new UserResource($this->whenLoaded('issuedBy')),
+            'issued_to' => new UserResource($this->whenLoaded('issuedTo')),
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
+            'replies' => TicketReplyResource::collection($this->whenLoaded('replies')),
         ];
     }
 }

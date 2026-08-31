@@ -12,37 +12,11 @@
             <th>Last Update On</th>
             <th>Issued To</th>
         </tr>
-        <tr v-for="ticket in tickets" :key="ticket?.id">
-            <td>
-                {{ ticket?.id }}
-            </td>
-            <td>
-                {{ ticket?.title }}
-            </td>
-            <td>
-                {{ ticket?.category }}
-            </td>
-            <td>
-                {{ ticket?.status }}
-            </td>
-            <td>
-                {{ ticket?.issued_by }}
-            </td>
-            <td>
-                {{ ticket?.created_at }}
-            </td>
-            <td>
-                {{ ticket?.updated_at }}
-            </td>
-            <td>
-                {{ ticket?.issued_to }}
-            </td>
-
-            <td>
-                <button>Edit</button>
-                |
-                <button>Delete</button>
-            </td>
+        <tr v-for="ticket in tickets" :key="ticket?.id"
+            @click="Navigation.toPath(`/tickets/${ticket.id}`)"
+        >
+        
+            <TicketCard :ticket="ticket" />
         </tr>
     </table>
 </template>
@@ -51,6 +25,8 @@
 import {onMounted, computed} from 'vue';
 import {ticketStore} from '../store';
 import ErrorMessage from '../../components/ErrorMessage.vue';
+import { Navigation } from '../../../facades/router';
+import TicketCard from '../components/TicketCard.vue';
 
 const tickets = ticketStore.getters.all;
 
@@ -58,4 +34,5 @@ onMounted(async () => {
     await ticketStore.actions.getAll();
     console.log(tickets.value);
 });
+
 </script>
