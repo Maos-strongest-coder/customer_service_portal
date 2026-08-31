@@ -34,9 +34,15 @@ export const storeModuleFactory = (moduleName: string) => {
     const actions = {
         getAll: async () => {
             const data = await Http.get(`/${moduleName}`);
-            console.log('Ruwe API data voor', moduleName, ':', data);
+            console.log( moduleName, data);
             if (!data) return;
             setters.setAll(data);
+        },
+
+        getOne: async (item: any) => {
+            const data = await Http.get(`/${moduleName}/${item.id}`)
+            if (!data) return;
+            setters.setOne(data);
         },
 
         create: async (item: any) => {
