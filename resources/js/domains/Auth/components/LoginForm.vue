@@ -1,6 +1,4 @@
 <template>
-    <ErrorMessage />
-
     <form method="POST" @submit.prevent="handleSubmit">
         <div class="mb-4">
             <label name="email" class="block">Email:</label>
@@ -12,7 +10,6 @@
                 placeholder="JohnDoe@email.com"
                 required
             />
-            <FormError name="email" />
         </div>
 
         <div class="mb-4">
@@ -25,7 +22,6 @@
                 placeholder="********"
                 required
             />
-            <FormError name="password" />
         </div>
 
         <button type="submit" class="bg-blue-600 text-white px-4 py-2">Log in</button>
