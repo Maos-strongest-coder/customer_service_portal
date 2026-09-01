@@ -1,9 +1,14 @@
 import {storeModuleFactory} from '../../factories/storeFactory';
 import {Http} from '../../facades/http';
-import axios from 'axios';
+import { computed } from 'vue';
 
 export const authStore = storeModuleFactory('auth');
 
+export const currentUser = computed(() => authStore.getters.all.value[0] || null);
+
+export const isAdmin = computed(() => currentUser.value?.role === 'admin');
+
+export const getRole = computed(() => currentUser.value?.role || 'user');
 authStore.actions.login = async credentials => {
     await Http.get('/sanctum/csrf-cookie', {withCredentials: true});
     const response = await Http.post('login', credentials);
