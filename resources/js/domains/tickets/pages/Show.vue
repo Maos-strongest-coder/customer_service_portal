@@ -20,24 +20,45 @@
             </tbody>
         </table>
 
-        <h2>Replies</h2>
+        <div>
+            <h2>Replies</h2>
 
-        <div v-if="ticket.replies && ticket.replies.length > 0">
-            <div v-for="reply in ticket.replies " :key="reply.id">
-                <strong>{{ reply.user?.full_name }}</strong>
-                |
-                <span>{{ reply.created_at }}</span>
+            <div v-if="ticket.replies && ticket.replies.length > 0">
+                <div v-for="reply in ticket.replies" :key="reply.id">
+                    <strong>{{ reply.user?.full_name }}</strong>
+                    |
+                    <span>{{ reply.created_at }}</span>
 
-                <p>{{ reply.message }}</p>
+                    <div v-if="editReplyId === reply.id" >
+                        <form @submit.prevent="handleUpdateSubmit(reply.id)">
+                            <input v-model="editFormMessage" required />
+                            
+                            <button type="submit">
+                                Save
+                            </button>
+                            |
+                            <button type="button" @click="cancelEdit">
+                                Cancel
+                            </button>
+                        </form>
+                    </div>
+
+                    <div v-else>
+                        <p>{{ reply.message }}</p>
+
+                        <div v-if="isAdmin" >
+                            <button @click="startEdit(reply)" >Edit</button>
+                        </div>
+                    </div>
+                   
+                </div>
             </div>
+
+            <div v-else>No replies yet.</div>
+
+            <ChatBox :ticketId="ticket.id" @submit="handleSubmit" />
         </div>
-
-        <div v-else>No replies yet.</div>
-
-        <ChatBox :ticketId="ticket.id" @submit="handleSubmit"/>
     </div>
-
-    
 </template>
 
 <script setup>
@@ -46,14 +67,30 @@ import {ticketStore} from '../store';
 import {Navigation} from '../../../facades/router';
 import TicketCard from '../components/TicketCard.vue';
 import ChatBox from '../components/ChatBox.vue';
-import { Http } from '../../../facades/http';
+import {Http} from '../../../facades/http';
+import {isAdmin} from '../../Auth/store';
+import {message} from '../../../services/error';
 
 const currentId = ref(null);
+
+const editReplyId = ref(null);
+
+const editFormMessage = ref('');
 
 const ticket = computed(() => {
     if (!currentId.value) return null;
     return ticketStore.getters.getById(currentId.value).value;
 });
+
+const startEdit = reply => {
+    editReplyId.value = reply.id;
+    editFormMessage.value = reply.message;
+};
+
+const cancelEdit = () => {
+    editReplyId.value = null;
+    editFormMessage.value = '';
+};
 
 onMounted(async () => {
     const currentRoute = Navigation.currentRoute();
@@ -66,11 +103,21 @@ onMounted(async () => {
     }
 });
 
-const handleSubmit = async (formData) => {
+const handleSubmit = async formData => {
     await Http.post(`/tickets/${formData.ticketId}/replies`, {
-        message: formData.message
+        message: formData.message,p
     });
 
-    await ticketStore.actions.getOne({ id: formData.ticketId})
-}
+   await ticketStore.actions.getOne({id: formData.ticketId});
+};
+
+const handleUpdateSubmit = async replyId => {
+    await Http.put(`/tickets/${currentId.value}/replies/${replyId}`, {
+        message: editFormMessage.value,
+    });
+
+    cancelEdit();
+
+    await ticketStore.actions.getOne({id: currentId.value});
+};
 </script>
