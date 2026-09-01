@@ -105,7 +105,7 @@ onMounted(async () => {
 
 const handleSubmit = async formData => {
     await Http.post(`/tickets/${formData.ticketId}/replies`, {
-        message: formData.message,p
+        message: formData.message,
     });
 
    await ticketStore.actions.getOne({id: formData.ticketId});
