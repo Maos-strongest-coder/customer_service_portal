@@ -6,13 +6,11 @@
   width: 20px;
 }
 
-/* The form handling layout and alignment */
 .chat-form {
   display: flex;
   gap: 0.5rem;
 }
 
-/* The text input field */
 .chat-input {
   flex: 1 1 0%;
   border: 1px solid #e5e7eb;
@@ -31,7 +29,6 @@
   box-shadow: 0 0 0 1px #3b82f6;
 }
 
-/* The submission button */
 .chat-submit {
   background-color: #2563eb;
   color: #ffffff;
