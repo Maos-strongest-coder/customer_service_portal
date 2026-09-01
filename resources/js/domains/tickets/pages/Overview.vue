@@ -1,6 +1,4 @@
 <template>
-    <ErrorMessage />
-
     <table>
         <tr>
             <th>Ticket ID</th>
@@ -11,6 +9,7 @@
             <th>Issued On</th>
             <th>Last Update On</th>
             <th>Issued To</th>
+            <th v-if="isAdmin">Actions</th>
         </tr>
         <tr v-for="ticket in tickets" :key="ticket?.id"
             @click="Navigation.toPath(`/tickets/${ticket.id}`)"
@@ -27,6 +26,7 @@ import {ticketStore} from '../store';
 import ErrorMessage from '../../components/ErrorMessage.vue';
 import { Navigation } from '../../../facades/router';
 import TicketCard from '../components/TicketCard.vue';
+import { isAdmin } from '../../Auth/store';
 
 const tickets = ticketStore.getters.all;
 
