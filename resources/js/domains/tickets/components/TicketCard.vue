@@ -25,7 +25,7 @@
         {{ ticket?.issued_to?.full_name }}
     </td>
 
-    <td>
+    <td v-if="isAdmin">
         <button>Edit</button>
         |
         <button>Delete</button>
@@ -33,6 +33,8 @@
 </template>
 
 <script setup>
+import { isAdmin } from '../../Auth/store';
+
     defineProps({
         ticket: Object,
     })
