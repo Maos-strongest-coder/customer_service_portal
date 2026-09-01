@@ -1,0 +1,49 @@
+.chat-container {
+  padding: 1rem;
+  border-top: 1px solid #e5e7eb;
+  background-color: #ffffff;
+  flex-shrink: 0;
+  width: 20px;
+}
+
+/* The form handling layout and alignment */
+.chat-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* The text input field */
+.chat-input {
+  flex: 1 1 0%;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.chat-input:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 1px #3b82f6;
+}
+
+/* The submission button */
+.chat-submit {
+  background-color: #2563eb;
+  color: #ffffff;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+}
+
+.chat-submit:hover {
+  background-color: #1d4ed8;
+}
