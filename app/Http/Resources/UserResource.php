@@ -16,8 +16,9 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            
             'full_name' => trim("{$this->first_name} {$this->last_name}"),
+            'email' => $this->email,
+            'role' => $this->role,
         ];
     }
 }
