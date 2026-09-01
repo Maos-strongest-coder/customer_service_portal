@@ -16,6 +16,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/tickets/{ticket}/replies', [TicketReplyController::class, 'store']);
 
+    Route::put('/tickets/{ticket}/replies/{reply}', [TicketReplyController::class, 'update']);
+
     Route::post('/logout', [LoginController::class, 'logout']);
 });
 
