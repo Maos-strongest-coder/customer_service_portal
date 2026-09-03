@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use App\Http\Resources\TicketResource;
 use Illuminate\Support\Facades\Auth;
 
+
 class TicketController extends Controller
 {
     /**
@@ -17,10 +18,10 @@ class TicketController extends Controller
         $userRole = Auth::user()->role;
         $userId = Auth::user()->id;
 
-        if ($userRole === 'admin'){
+        if ($userRole === 'admin') {
             $tickets = Ticket::with(['issuedBy', 'issuedTo'])->get();
         } else {
-            $tickets = Ticket::with(['issuedBy', 'issuedTo'])-> where('issued_by',  $userId)->get();
+            $tickets = Ticket::with(['issuedBy', 'issuedTo'])->where('issued_by',  $userId)->get();
         }
 
         return TicketResource::collection($tickets);
@@ -44,7 +45,7 @@ class TicketController extends Controller
 
         $ticket->load(['issuedBy', 'issuedTo', 'replies.user']);
 
-        if ($userRole !== 'admin' && $ticket->issued_by !== $userId ) {
+        if ($userRole !== 'admin' && $ticket->issued_by !== $userId) {
             return response()->json([
                 'message' => 'You cannot view this ticket'
             ], 400);
