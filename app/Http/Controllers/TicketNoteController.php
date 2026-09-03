@@ -51,4 +51,15 @@ class TicketNoteController extends Controller
 
         return new TicketNoteResource($note);
     }
+
+    public function destroy(Ticket $ticket, TicketNote $note)
+    {
+        if (Auth::user()->role !== 'admin') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $note->delete();
+
+        return response()->json(['message' => 'Note deleted successfully']);
+    }
 }
