@@ -6,6 +6,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketReplyController;
+use App\Http\Controllers\TicketNoteController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
@@ -17,6 +18,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/tickets/{ticket}/replies', [TicketReplyController::class, 'store']);
 
     Route::put('/tickets/{ticket}/replies/{reply}', [TicketReplyController::class, 'update']);
+
+    Route::get('/tickets/{ticket}/notes', [TicketNoteController::class, 'index']);
+    Route::post('/tickets/{ticket}/notes', [TicketNoteController::class, 'store']);
+    Route::put('/tickets/{ticket}/notes/{note}', [TicketNoteController::class, 'update']);
+    Route::delete('/tickets/{ticket}/notes/{note}', [TicketNoteController::class, 'destroy']);
+
 
     Route::post('/logout', [LoginController::class, 'logout']);
 });
