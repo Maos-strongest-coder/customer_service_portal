@@ -19,13 +19,13 @@ const loadCurrentUser = async () => {
     if (user) {
         currentUser.value = user.first_name;
     } else {
-        Navigation.toPath('/');
+        Navigation.to('dashboard');
     }
 };
 
 const handleLogout = async () => {
     await authStore.actions.logout();
 
-    Navigation.toPath('/');
+    Navigation.to('dashboard');
 };
 </script>
