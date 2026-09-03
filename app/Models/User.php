@@ -31,7 +31,7 @@ class User extends Authenticatable
         ];
     }
 
-     protected $fillable = [
+    protected $fillable = [
         'first_name',
         'last_name',
         'email',
@@ -49,5 +49,8 @@ class User extends Authenticatable
         return $this->hasMany(Ticket::class);
     }
 
-
+    public function notes()
+    {
+        return $this->hasMany(TicketNote::class);
+    }
 }
