@@ -22,7 +22,9 @@ class TicketNoteFactory extends Factory
         return [
             'ticket_id' => Ticket::factory(),
             'user_id' => User::factory(['role' => 'admin']),
-            'note' => fake()->text()
+            'message' => fake()->text(),
+            'created_at' => fake()->dateTimeBetween('-2 month', '-1 month'),
+            'updated_at' => fake()->dateTimeBetween('-1 month')
         ];
     }
 }
