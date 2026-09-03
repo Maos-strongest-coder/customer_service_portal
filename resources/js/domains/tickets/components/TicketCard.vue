@@ -5,7 +5,7 @@
     <td>
         {{ ticket?.title }}
     </td>
-    
+
     <td>
         {{ ticket?.category }}
     </td>
@@ -28,14 +28,15 @@
     <td v-if="isAdmin">
         <button>Edit</button>
         |
-        <button>Delete</button>
+        <button class="delete">Delete</button>
     </td>
 </template>
 
 <script setup>
-import { isAdmin } from '../../Auth/store';
+import {isAdmin} from '../../Auth/store';
+import {Navigation} from '../../../facades/router';
 
-    defineProps({
-        ticket: Object,
-    })
+defineProps({
+    ticket: Object,
+});
 </script>
