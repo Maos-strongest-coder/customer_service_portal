@@ -13,6 +13,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/tickets', [TicketController::class, 'index']);
 
+    Route::post('/tickets', [TicketController::class, 'store']);
+
     Route::get('/tickets/{ticket}', [TicketController::class, 'show']);
 
     Route::post('/tickets/{ticket}/replies', [TicketReplyController::class, 'store']);
@@ -24,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/tickets/{ticket}/notes/{note}', [TicketNoteController::class, 'update']);
     Route::delete('/tickets/{ticket}/notes/{note}', [TicketNoteController::class, 'destroy']);
 
+    Route::get('/categories', [CategoryController::class, 'index']);
 
     Route::post('/logout', [LoginController::class, 'logout']);
 });

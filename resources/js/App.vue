@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import ErrorMessage from './domains/components/ErrorMessage.vue';
-
 </script>
 
 <template>
@@ -10,6 +9,8 @@ import ErrorMessage from './domains/components/ErrorMessage.vue';
         <router-link :to="{name: 'login'}">Login</router-link>
         |
         <router-link :to="{name: 'overview'}">Overview</router-link>
+        |
+        <router-link :to="{name: 'create'}">Report an Issue</router-link>
     </nav>
     <ErrorMessage />
 
