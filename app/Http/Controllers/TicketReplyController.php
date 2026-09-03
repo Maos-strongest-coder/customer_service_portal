@@ -19,12 +19,12 @@ class TicketReplyController extends Controller
             'message' => $request->validated('message'),
         ]);
 
-         $reply->load('user');
+        $reply->load('user');
 
-         return new TicketReplyResource($reply);
+        return new TicketReplyResource($reply);
     }
 
-     public function update(UpdateTicketReplyRequest $request, Ticket $ticket, TicketReply $reply): TicketReplyResource
+    public function update(UpdateTicketReplyRequest $request, Ticket $ticket, TicketReply $reply): TicketReplyResource
     {
         $userRole = Auth::user()->role;
         if ($userRole === 'user') {
@@ -37,5 +37,4 @@ class TicketReplyController extends Controller
 
         return new TicketReplyResource($reply);
     }
-    
 }
