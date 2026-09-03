@@ -55,10 +55,10 @@ table button:hover {
 }
 
 
-table button:last-of-type {
+button.delete {
     color: #dc2626; 
 }
 
-table button:last-of-type:hover {
+button.delete:hover {
     background-color: #fef2f2;
 }
