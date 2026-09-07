@@ -23,8 +23,8 @@ class TicketFactory extends Factory
             'title' => fake()->sentence(),
             'category_id' => Category::factory(),
             'status' => fake()->randomElement(['open', 'started', 'closed']),
-            'issued_by' => User::factory()->user(),
-            'issued_to' => User::factory()->admin(),
+            'issued_by_id' => User::factory()->user(),
+            'issued_to_id' => User::factory()->admin(),
             'created_at' => fake()->dateTimeBetween('-2 month', '-1 month'),
             'updated_at' => fake()->dateTimeBetween('-1 month')
         ];

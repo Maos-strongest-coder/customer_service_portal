@@ -20,61 +20,11 @@
                 <TicketCard :ticket="ticket" />
             </tbody>
         </table>
-
-        <div v-if="isAdmin" class="admin-notes-section">
-            <h3>Internal Notes</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Admin</th>
-                        <th>Note</th>
-                        <th>Date</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <template v-if="notes && notes.length > 0">
-                        <tr v-for="note in notes" :key="note.id">
-                            <td>{{ note.user?.full_name }}</td>
-
-                            <td>
-                                <div v-if="editNoteId === note.id">
-                                    <form :id="'form-' + note.id" @submit.prevent="handleUpdateNoteSubmit(note.id)">
-                                        <input v-model="editNoteMessage" required />
-                                    </form>
-                                </div>
-                                <div v-else>
-                                    {{ note.message }}
-                                </div>
-                            </td>
-
-                            <td>{{ note.created_at }}</td>
-
-                            <td>
-                                <template v-if="editNoteId !== note.id">
-                                    <button @click="startEditNote(note)">Edit</button>
-                                    |
-                                    <button class="delete" @click="handleDeleteNote(note.id)">Delete</button>
-                                </template>
-
-                                <template v-else>
-                                    <button type="submit" :form="['form-' + note.id]">Save</button>
-                                    |
-                                    <button class="delete" type="button" @click="cancelEditNote">Cancel</button>
-                                </template>
-                            </td>
-                        </tr>
-                    </template>
-
-                    <tr v-else>
-                        <td colspan="4">No notes available.</td>
-                    </tr>
-                </tbody>
-            </table>
-
+        
+        <template v-if="isAdmin">
+            <NotesTable ref="notesTableRef" :ticketId="currentId" />
             <ChatBox :ticketId="ticket.id" type="note" @submit="handleChatSubmit" />
-        </div>
+        </template>
 
         <div>
             <h2>Replies</h2>
@@ -88,7 +38,6 @@
                     <div v-if="editReplyId === reply.id">
                         <form @submit.prevent="handleUpdateReplySubmit(reply.id)">
                             <input v-model="editFormMessage" required />
-
                             <button type="submit">Save</button>
                             |
                             <button type="button" @click="cancelEditReply">Cancel</button>
@@ -97,7 +46,6 @@
 
                     <div v-else>
                         <p>{{ reply.message }}</p>
-
                         <div v-if="isAdmin">
                             <button @click="startEditReply(reply)">Edit</button>
                         </div>
@@ -107,7 +55,7 @@
 
             <div v-else>No replies yet.</div>
 
-            <ChatBox :ticketId="ticket.id" type="reply" @submit="handleChatSubmit" />
+            <ChatBox v-if="isAdmin" :ticketId="ticket.id" type="reply" @submit="handleChatSubmit" />
         </div>
     </div>
 </template>
@@ -118,19 +66,16 @@ import {ticketStore} from '../store';
 import {Navigation} from '../../../facades/router';
 import TicketCard from '../components/TicketCard.vue';
 import ChatBox from '../components/ChatBox.vue';
+import NotesTable from '../components/NotesTable.vue';
 import {Http} from '../../../facades/http';
 import {isAdmin} from '../../Auth/store';
 import {authStore} from '../../Auth/store';
 
 const currentId = ref(null);
+const notesTableRef = ref(null);
 
 const editReplyId = ref(null);
 const editFormMessage = ref('');
-
-const editNoteId = ref(null);
-const editNoteMessage = ref('');
-
-const notes = ref([]);
 
 const ticket = computed(() => {
     if (!currentId.value) return null;
@@ -147,39 +92,20 @@ const cancelEditReply = () => {
     editFormMessage.value = '';
 };
 
-const startEditNote = note => {
-    editNoteId.value = note.id;
-    editNoteMessage.value = note.message;
-};
-
-const cancelEditNote = () => {
-    editNoteId.value = null;
-    editNoteMessage.value = '';
-};
-
-const deleteNote = async noteId => {
-    await Http.delete(`/tickets/${currentId.value}/notes/${noteId}`);
-    await fetchNotes(currentId.value);
-};
-
-const fetchNotes = async ticketId => {
-    const response = await Http.get(`/tickets/${ticketId}/notes`);
-    notes.value = response.data || response || [];
-};
-
 onMounted(async () => {
     const currentRoute = Navigation.currentRoute();
     const ticketId = currentRoute.params.id;
+   
 
     if (ticketId) {
         currentId.value = ticketId;
 
-        await authStore.actions.me();
-
+        
         await ticketStore.actions.getOne({id: ticketId});
 
         if (isAdmin.value) {
-            await fetchNotes(ticketId);
+            
+            await notesTableRef.value.fetchNotes();
         }
     }
 });
@@ -189,7 +115,7 @@ const handleChatSubmit = async formData => {
         await Http.post(`/tickets/${formData.ticketId}/notes`, {
             message: formData.message,
         });
-        await fetchNotes(formData.ticketId);
+        await notesTableRef.value.fetchNotes();
     } else {
         await Http.post(`/tickets/${formData.ticketId}/replies`, {
             message: formData.message,
@@ -204,21 +130,5 @@ const handleUpdateReplySubmit = async replyId => {
     });
     cancelEditReply();
     await ticketStore.actions.getOne({id: currentId.value});
-};
-
-const handleUpdateNoteSubmit = async noteId => {
-    await Http.put(`/tickets/${currentId.value}/notes/${noteId}`, {
-        message: editNoteMessage.value,
-    });
-    cancelEditNote();
-    await fetchNotes(currentId.value);
-};
-
-const handleDeleteNote = async noteId => {
-    if (confirm('Are you sure you want to delete this note?')) {
-        await Http.delete(`/tickets/${currentId.value}/notes/${noteId}`);
-
-        await fetchNotes(currentId.value);
-    }
 };
 </script>

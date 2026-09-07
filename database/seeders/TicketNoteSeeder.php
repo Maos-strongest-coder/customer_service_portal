@@ -16,11 +16,11 @@ class TicketNoteSeeder extends Seeder
     public function run(): void
     {
         $tickets = Ticket::all();
-        $adminUsers = User::where('role', 'admin')->get();
+        $admins = User::where('role', 'admin')->get();
 
         TicketNote::factory()
             ->count(50)
-            ->recycle([$tickets, $adminUsers])
+            ->recycle([$tickets, $admins])
             ->create();
     }
 }

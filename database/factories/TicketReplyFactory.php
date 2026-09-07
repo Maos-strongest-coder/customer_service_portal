@@ -21,7 +21,7 @@ class TicketReplyFactory extends Factory
     {
         return [
             'ticket_id' => Ticket::factory(),
-            'user_id' => User::factory(),
+            'user_id' => User::factory(['role' => 'admin']),
             'message' => fake()->text(), 
         ];
     }

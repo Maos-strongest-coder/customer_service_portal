@@ -13,7 +13,7 @@
         {{ ticket?.status }}
     </td>
     <td>
-        {{ ticket?.issued_by?.full_name }}
+        {{ ticket?.issued_by_id?.full_name }}
     </td>
     <td>
         {{ ticket?.created_at }}
@@ -22,12 +22,12 @@
         {{ ticket?.updated_at }}
     </td>
     <td>
-        {{ ticket?.issued_to?.full_name }}
+        {{ ticket?.issued_to_id?.full_name }}
     </td>
 
     <template v-if="showActions">
         <td v-if="canManage">
-            <button @click="Navigation.to('edit', {id: ticket?.id})">Edit</button>
+            <button @click.stop="Navigation.to('edit', {id: ticket?.id})">Edit</button>
             |
             <button class="delete">Delete</button>
         </td>

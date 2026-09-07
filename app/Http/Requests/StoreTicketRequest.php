@@ -22,6 +22,8 @@ class StoreTicketRequest extends FormRequest
      */
     public function rules(): array
     {
+        $isAdmin = $this->user()->role === 'admin';
+        
         return [
             'title' => [
                 'required',
@@ -33,7 +35,17 @@ class StoreTicketRequest extends FormRequest
                 'required',
                 'integer',
                 'exists:categories,id'
-            ]
+            ],
+           'status' => [
+            $isAdmin ? 'required' : 'prohibited',
+            'string',
+            'in:open,started,closed',
+            ],
+            'issued_to' => [
+                $isAdmin ? 'required' : 'prohibited',
+                'integer',
+                'exists:users,id',
+            ],
         ];
     }
 }

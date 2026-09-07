@@ -22,10 +22,10 @@ class TicketSeeder extends Seeder
         Ticket::factory()
             ->count(20)
             ->create([
-                'issued_by' => function () use ($users) {
+                'issued_by_id' => function () use ($users) {
                     return $users->random()->id;
                 },
-                'issued_to' => function () use ($admins) {
+                'issued_to_id' => function () use ($admins) {
                     return $admins->random()->id;
                 },
                 'category_id' => function () use ($categories) {

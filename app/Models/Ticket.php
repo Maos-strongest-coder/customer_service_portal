@@ -15,8 +15,8 @@ class Ticket extends Model
         'title',
         'category_id',
         'status',
-        'issued_by',
-        'issued_to',
+        'issued_by_id',
+        'issued_to_id',
     ];
 
     public function notes(): HasMany
@@ -31,12 +31,12 @@ class Ticket extends Model
 
     public function issuedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'issued_by');
+        return $this->belongsTo(User::class, 'issued_by_id');
     }
 
     public function issuedTo(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'issued_to');
+        return $this->belongsTo(User::class, 'issued_to_id');
     }
 
     public function category(): BelongsTo

@@ -34,7 +34,7 @@ export const storeModuleFactory = (moduleName: string) => {
     const actions = {
         getAll: async () => {
             const data = await Http.get(`/${moduleName}`);
-            console.log( moduleName, data);
+            // console.log( moduleName, data);
             if (!data) return;
             setters.setAll(data);
         },

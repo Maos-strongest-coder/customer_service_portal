@@ -16,11 +16,11 @@ class TicketReplySeeder extends Seeder
     public function run(): void
     {
         $tickets = Ticket::all();
-        $users = User::all();
+        $admins = User::where('role', 'admin')->get();
 
         TicketReply::factory()
             ->count(50)
-            ->recycle([$tickets, $users])
+            ->recycle([$tickets, $admins])
             ->create();
     }
 }
