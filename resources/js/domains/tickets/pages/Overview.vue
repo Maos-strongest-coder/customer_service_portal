@@ -9,7 +9,7 @@
             <th>Issued On</th>
             <th>Last Update On</th>
             <th>Issued To</th>
-            <th v-if="isAdmin">Actions</th>
+            <th>Actions</th>
         </tr>
         <tr v-for="ticket in tickets" :key="ticket?.id" @click="Navigation.to('show', {id: ticket?.id})">
             <TicketCard :ticket="ticket" />

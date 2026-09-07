@@ -13,7 +13,7 @@
                     <th>Issued On</th>
                     <th>Last Update On</th>
                     <th>Issued To</th>
-                    <th v-if="isAdmin">Actions</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
