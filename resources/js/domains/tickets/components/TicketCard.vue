@@ -7,7 +7,7 @@
     </td>
 
     <td>
-        {{ ticket?.category }}
+        {{ ticket?.category.name }}
     </td>
     <td>
         {{ ticket?.status }}

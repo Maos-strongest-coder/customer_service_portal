@@ -17,7 +17,6 @@ class CategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            // check even dat je de migraties aanpast, categories moet in een eigen tabel komen, en tickets moet een category_id hebben
         ];
     }
 }
