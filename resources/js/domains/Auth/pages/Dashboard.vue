@@ -1,27 +1,15 @@
 <template>
     <h2>dashboard</h2>
-    <button type="button" @click="loadCurrentUser">Get current user</button>
-    |
+  
     <button type="button" @click="handleLogout">Logout</button>
 
-    <div>current user is {{ currentUser }}</div>
 </template>
 
 <script setup>
-import {ref} from 'vue';
 import {authStore} from '../store';
 import {Navigation} from '../../../facades/router';
 
-const currentUser = ref();
-
-const loadCurrentUser = async () => {
-    const user = await authStore.actions.me();
-    if (user) {
-        currentUser.value = user.first_name;
-    } else {
-        Navigation.to('dashboard');
-    }
-};
+;
 
 const handleLogout = async () => {
     await authStore.actions.logout();
