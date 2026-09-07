@@ -13,7 +13,7 @@ class Ticket extends Model
 
     protected $fillable = [
         'title',
-        'category',
+        'category_id',
         'status',
         'issued_by',
         'issued_to',
@@ -37,5 +37,10 @@ class Ticket extends Model
     public function issuedTo(): BelongsTo
     {
         return $this->belongsTo(User::class, 'issued_to');
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 }
