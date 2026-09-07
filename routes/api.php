@@ -7,18 +7,17 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketReplyController;
 use App\Http\Controllers\TicketNoteController;
+use App\Http\Controllers\CategoryController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
 
     Route::get('/tickets', [TicketController::class, 'index']);
-
     Route::post('/tickets', [TicketController::class, 'store']);
-
+    Route::put('/tickets/{ticket}', [TicketController::class, 'update']);
     Route::get('/tickets/{ticket}', [TicketController::class, 'show']);
 
     Route::post('/tickets/{ticket}/replies', [TicketReplyController::class, 'store']);
-
     Route::put('/tickets/{ticket}/replies/{reply}', [TicketReplyController::class, 'update']);
 
     Route::get('/tickets/{ticket}/notes', [TicketNoteController::class, 'index']);
