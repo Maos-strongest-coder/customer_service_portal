@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Ticket;
 use App\Http\Resources\TicketResource;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreTicketRequest;
 
 
 class TicketController extends Controller
@@ -30,9 +31,15 @@ class TicketController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTicketRequest $request)
     {
-        //
+        $ticket = Ticket::create([
+            ...$request->validated(),
+            'issued_by' => Auth::id(),
+            'status' => 'open',
+        ]);
+
+        return new TicketResource($ticket);
     }
 
     /**
