@@ -1,23 +1,7 @@
 <template>
     <div>
         <h1>Create a Ticket</h1>
-        <form @submit.prevent="handleSubmit">
-            <div>
-                <label for="title">Title:</label>
-                <input v-model="ticket.title" type="text" required />
-            </div>
-
-            <div>
-                <label for="category">Category:</label>
-
-                <select v-model="ticket.category_id" required>
-                    <option value="" disabled>Select a category</option>
-                    <option v-for="category in categories" :key="category.id" :value="category.id">
-                        {{ category.name }}
-                    </option>
-                </select>
-            </div>
-        </form>
+        <Form :ticket="ticket" @submit="handleSubmit" />
     </div>
 </template>
 
@@ -25,26 +9,36 @@
 import {ticketStore} from '../store';
 import {ref, onMounted} from 'vue';
 import {Navigation} from '../../../facades/router';
+import {Http} from '../../../facades/http';
+import {categoryStore} from '../../categories/store';
+import Form from '../components/Form.vue';
 
 const ticket = ref({
     title: '',
-    category: '',
+    category_id: '',
 });
 
-const categories = ref([]);
+const categories = ref([
+    {
+        id: 0,
+        name: '',
+    }
+]);
 
-const fetchCategories = async () => {
-    const response = await Http.get('/categories');
 
-    categories.value = response.data?.data;
-};
 
-onMounted(() => {
-    fetchCategories();
+onMounted(async () => {
+    await categoryStore.actions.getAll();
+
+    categories.value = categoryStore.getters.all.value;
+    
 });
 
-const handleSubmit = async => {
-    await ticketStore.actions.create(ticket.value);
+const handleSubmit = async data => {
+    await ticketStore.actions.create(data);
+
     Navigation.to('overview');
+
+
 };
 </script>
