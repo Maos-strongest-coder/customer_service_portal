@@ -25,18 +25,34 @@
         {{ ticket?.issued_to?.full_name }}
     </td>
 
-    <td v-if="isAdmin">
-        <button>Edit</button>
-        |
-        <button class="delete">Delete</button>
-    </td>
+    <template v-if="showActions">
+        <td v-if="canManage">
+            <button @click="Navigation.to('edit', {id: ticket?.id})">Edit</button>
+            |
+            <button class="delete">Delete</button>
+        </td>
+
+        <td v-else>
+            <span>Not Authorized</span>
+        </td>
+    </template>
 </template>
 
 <script setup>
-import {isAdmin} from '../../Auth/store';
+import {isAdmin, currentUser} from '../../Auth/store';
+import {computed} from 'vue';
 import {Navigation} from '../../../facades/router';
 
-defineProps({
+const props = defineProps({
     ticket: Object,
+    showActions: {
+        type: Boolean,
+        default: true,
+    },
+});
+
+
+const canManage = computed(() => {
+    return isAdmin.value || props.ticket?.issued_by?.id === currentUser.value?.id;
 });
 </script>
