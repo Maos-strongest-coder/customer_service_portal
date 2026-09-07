@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTicketRequest;
 
 
+
 class TicketController extends Controller
 {
     /**
@@ -63,9 +64,23 @@ class TicketController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreTicketRequest $request, string $id)
     {
-        //
+        $ticket = Ticket::findOrFail($id);
+
+        $userRole = Auth::user()->role;
+        $userId = Auth::user()->id;
+
+        if ($userRole !== 'admin' && $ticket->issued_by !== $userId) {
+            return response()->json([
+                'message' => 'You cannot update this ticket'
+            ], 400);
+        }
+        
+
+        $ticket->update($request->validated());
+
+        return new TicketResource($ticket);
     }
 
     /**
