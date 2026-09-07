@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Ticket;
+use App\Models\Category;
 
 class TicketSeeder extends Seeder
 {
@@ -15,7 +16,8 @@ class TicketSeeder extends Seeder
     public function run(): void
     {
         $users = User::where('role', 'user')->get();
-        $adminUsers = User::where('role', 'admin')->get();
+        $admins = User::where('role', 'admin')->get();
+        $categories = Category::all();
 
         Ticket::factory()
             ->count(20)
@@ -23,9 +25,12 @@ class TicketSeeder extends Seeder
                 'issued_by' => function () use ($users) {
                     return $users->random()->id;
                 },
-                'issued_to' => function () use ($adminUsers) {
-                    return $adminUsers->random()->id;
+                'issued_to' => function () use ($admins) {
+                    return $admins->random()->id;
                 },
+                'category_id' => function () use ($categories) {
+                    return $categories->random()->id;
+                }
             ]);
     }
 }

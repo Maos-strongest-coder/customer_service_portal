@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Ticket;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
+use App\Models\Category;
 
 /**
  * @extends Factory<Ticket>
@@ -20,7 +21,7 @@ class TicketFactory extends Factory
     {
         return [
             'title' => fake()->sentence(),
-            'category' => fake()->word(),
+            'category_id' => Category::factory(),
             'status' => fake()->randomElement(['open', 'started', 'closed']),
             'issued_by' => User::factory()->user(),
             'issued_to' => User::factory()->admin(),
