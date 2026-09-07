@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import ErrorMessage from './domains/components/ErrorMessage.vue';
+import {onMounted} from 'vue';
+import {authStore} from './domains/Auth/store';
+
+onMounted(async () => {
+    await authStore.actions.me();
+});
 </script>
 
 <template>
