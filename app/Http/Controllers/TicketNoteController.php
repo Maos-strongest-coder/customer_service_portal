@@ -15,7 +15,7 @@ class TicketNoteController extends Controller
 {
     public function index(Ticket $ticket)
     {
-        $this->authorize('view', TicketNote::class);
+        $this->authorize('viewAny', TicketNote::class);
         
         $notes = $ticket->notes()->with('user')->get();
 
