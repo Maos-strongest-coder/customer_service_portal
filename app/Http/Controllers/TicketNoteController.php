@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Enums\UserRole;
+use App\Http\Requests\StoreTicketNoteRequest;
 use App\Models\Ticket;
 
 use App\Http\Resources\TicketNoteResource;
@@ -14,24 +15,22 @@ class TicketNoteController extends Controller
 {
     public function index(Ticket $ticket)
     {
-        if (Auth::user()->role !== 'admin') {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
+        $this->authorize('viewAny', TicketNote::class);
+        
         $notes = $ticket->notes()->with('user')->get();
 
         return TicketNoteResource::collection($notes);
     }
 
-    public function store(Ticket $ticket)
+    public function store(StoreTicketNoteRequest $request, Ticket $ticket) 
     {
-        if (Auth::user()->role !== 'admin') {
+        if (Auth::user()->role !== UserRole::ADMIN) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $note = $ticket->notes()->create([
+        $note = TicketNote::create([
+            ...$request->validated(),
             'user_id' => Auth::id(),
-            'message' => request('message'),
         ]);
 
         $note->load('user');
@@ -39,11 +38,9 @@ class TicketNoteController extends Controller
         return new TicketNoteResource($note);
     }
 
-    public function update(UpdateTicketNoteRequest $request, Ticket $ticket, TicketNote $note): TicketNoteResource
+    public function update(UpdateTicketNoteRequest $request, Ticket $ticket, TicketNote $note)
     {
-        if (Auth::user()->role !== 'admin') {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+        $this->authorize('update', $note);
 
         $note->update($request->validated());
 
@@ -54,9 +51,7 @@ class TicketNoteController extends Controller
 
     public function destroy(Ticket $ticket, TicketNote $note)
     {
-        if (Auth::user()->role !== 'admin') {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+        $this->authorize('update', $note);
 
         $note->delete();
 

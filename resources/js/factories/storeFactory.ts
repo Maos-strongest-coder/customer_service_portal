@@ -31,7 +31,7 @@ export const storeModuleFactory = (moduleName: string) => {
         },
     };
 
-    const actions = {
+    const actions: Record<string, (...args: any[]) => Promise<any>> = {
         getAll: async () => {
             const data = await Http.get(`/${moduleName}`);
             // console.log( moduleName, data);

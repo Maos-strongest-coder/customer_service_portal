@@ -28,12 +28,11 @@ http.interceptors.response.use(
         return response;
     },
     error => {
-        if (error.response && error.response.status === 400) {
-            setMessage(error.response.data.message);
+        if (error.response?.data?.message) {
+        setMessage(error.response.data.message);
         }
-        if (error.response && error.response.status === 422) {
+        if (error.response?.status === 422) {
             setErrorBag(error.response.data.errors);
-            setMessage(error.response.data.message);
         }
         return Promise.reject(error);
     },

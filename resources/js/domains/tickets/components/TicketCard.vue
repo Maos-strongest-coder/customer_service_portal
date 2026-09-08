@@ -7,13 +7,13 @@
     </td>
 
     <td>
-        {{ ticket?.category.name }}
+        {{ ticket?.category?.name }}
     </td>
     <td>
         {{ ticket?.status }}
     </td>
     <td>
-        {{ ticket?.issued_by_id?.full_name }}
+        {{ ticket?.issued_by?.full_name }}
     </td>
     <td>
         {{ ticket?.created_at }}
@@ -22,7 +22,7 @@
         {{ ticket?.updated_at }}
     </td>
     <td>
-        {{ ticket?.issued_to_id?.full_name }}
+        {{ ticket?.issued_to?.full_name }}
     </td>
 
     <template v-if="showActions">

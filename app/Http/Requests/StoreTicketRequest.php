@@ -2,8 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\TicketStatus;
+use App\Enums\UserRole;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreTicketRequest extends FormRequest
 {
@@ -22,7 +25,7 @@ class StoreTicketRequest extends FormRequest
      */
     public function rules(): array
     {
-        $isAdmin = $this->user()->role === 'admin';
+        $isAdmin = $this->user()->role === UserRole::ADMIN;
         
         return [
             'title' => [
@@ -38,10 +41,9 @@ class StoreTicketRequest extends FormRequest
             ],
            'status' => [
             $isAdmin ? 'required' : 'prohibited',
-            'string',
-            'in:open,started,closed',
+            new Enum(TicketStatus::class)
             ],
-            'issued_to' => [
+            'issued_to_id' => [
                 $isAdmin ? 'required' : 'prohibited',
                 'integer',
                 'exists:users,id',

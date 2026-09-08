@@ -8,32 +8,26 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\TicketReplyController;
 use App\Http\Controllers\TicketNoteController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\UserController;
 
+// apiresources moeten alle crud accounted for hebben
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
-
     Route::get('/users', [UserController::class, 'index']);
 
-    Route::get('/tickets', [TicketController::class, 'index']);
-    Route::post('/tickets', [TicketController::class, 'store']);
-    Route::put('/tickets/{ticket}', [TicketController::class, 'update']);
-    Route::get('/tickets/{ticket}', [TicketController::class, 'show']);
+    Route::apiResource('categories', CategoryController::class)->only('index');
+    Route::apiResource('tickets', TicketController::class)->except('destroy');
 
-    Route::post('/tickets/{ticket}/replies', [TicketReplyController::class, 'store']);
-    Route::put('/tickets/{ticket}/replies/{reply}', [TicketReplyController::class, 'update']);
+    Route::apiResource('tickets.replies', TicketReplyController::class)
+        ->only(['store', 'update'])
+        ->scoped();
 
-    Route::get('/tickets/{ticket}/notes', [TicketNoteController::class, 'index']);
-    Route::post('/tickets/{ticket}/notes', [TicketNoteController::class, 'store']);
-    Route::put('/tickets/{ticket}/notes/{note}', [TicketNoteController::class, 'update']);
-    Route::delete('/tickets/{ticket}/notes/{note}', [TicketNoteController::class, 'destroy']);
-
-    Route::get('/categories', [CategoryController::class, 'index']);
+    Route::apiResource('tickets.notes', TicketNoteController::class)
+        ->except(['show'])
+        ->scoped();
 
     Route::post('/logout', [LoginController::class, 'logout']);
 });
 
+Route::post('/login', [LoginController::class, 'login']);
 
-
-Route::middleware('')->group(function () {
-    Route::post('/login', [LoginController::class, 'login']);
-});

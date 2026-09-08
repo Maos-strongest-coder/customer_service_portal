@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
-            $table->enum('status', ['open', 'started', 'closed'])->default('open');
+            $table->enum('status', ['open', 'in_progress', 'closed'])->default('open');
             $table->foreignId('issued_by_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('issued_to_id')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();

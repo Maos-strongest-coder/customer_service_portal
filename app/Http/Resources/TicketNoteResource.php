@@ -2,11 +2,14 @@
 
 namespace App\Http\Resources;
 
+use App\Traits\FormatsDates;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TicketNoteResource extends JsonResource
 {
+    use FormatsDates;
+   
     /**
      * Transform the resource into an array.
      *
@@ -19,8 +22,8 @@ class TicketNoteResource extends JsonResource
             'ticket_id' => $this->ticket_id,
             'user_id' => $this->user_id,
             'message' => $this->message,
-            'created_at' => $this->created_at?->format('Y-m-d H:i:s'),
-            'updated_at' => $this->updated_at?->format('Y-m-d H:i:s'),
+            'created_at' => $this->formatDate($this->created_at),
+            'updated_at' => $this->formatDate($this->updated_at),
             'user' => new UserResource($this->whenLoaded('user')),
         ];
     }

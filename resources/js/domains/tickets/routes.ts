@@ -8,5 +8,4 @@ export const ticketRoutes = [
     {path: '/tickets/create', component: Create, name: 'create'},
     {path: '/tickets/:id/edit', component: Edit, name: 'edit'},
     {path: '/tickets/:id', component: Show, name: 'show'},
-    {path: '/tickets/:id/notes', component: Show, name: 'notes'},
 ];

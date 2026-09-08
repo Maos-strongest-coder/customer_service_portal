@@ -17,10 +17,10 @@
                 </tr>
             </thead>
             <tbody>
-                <TicketCard :ticket="ticket" />
+                <tr><TicketCard :ticket="ticket" /></tr>
             </tbody>
         </table>
-        
+
         <template v-if="isAdmin">
             <NotesTable ref="notesTableRef" :ticketId="currentId" />
             <ChatBox :ticketId="ticket.id" type="note" @submit="handleChatSubmit" />
@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-import {computed, onMounted, ref} from 'vue';
+import {computed, watch, ref} from 'vue';
 import {ticketStore} from '../store';
 import {Navigation} from '../../../facades/router';
 import TicketCard from '../components/TicketCard.vue';
@@ -69,7 +69,6 @@ import ChatBox from '../components/ChatBox.vue';
 import NotesTable from '../components/NotesTable.vue';
 import {Http} from '../../../facades/http';
 import {isAdmin} from '../../Auth/store';
-import {authStore} from '../../Auth/store';
 
 const currentId = ref(null);
 const notesTableRef = ref(null);
@@ -92,30 +91,21 @@ const cancelEditReply = () => {
     editFormMessage.value = '';
 };
 
-onMounted(async () => {
-    const currentRoute = Navigation.currentRoute();
-    const ticketId = currentRoute.params.id;
-   
-
-    if (ticketId) {
-        currentId.value = ticketId;
-
-        
-        await ticketStore.actions.getOne({id: ticketId});
-
-        if (isAdmin.value) {
-            
-            await notesTableRef.value.fetchNotes();
+watch(
+    [() => Navigation.currentRoute().params.id, isAdmin],
+    async ([id, admin]) => {
+        if (!id) return;
+        currentId.value = id;
+        await ticketStore.actions.getOne({id});
+        if (admin && notesTableRef.value) {
+            await notesTableRef.value.fetchNotes()
         }
-    }
-});
+
+    })
 
 const handleChatSubmit = async formData => {
     if (formData.type === 'note') {
-        await Http.post(`/tickets/${formData.ticketId}/notes`, {
-            message: formData.message,
-        });
-        await notesTableRef.value.fetchNotes();
+        await notesTableRef.value.addNote(formData.message);
     } else {
         await Http.post(`/tickets/${formData.ticketId}/replies`, {
             message: formData.message,

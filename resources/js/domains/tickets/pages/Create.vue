@@ -7,31 +7,13 @@
 
 <script setup>
 import {ticketStore} from '../store';
-import {ref, onMounted} from 'vue';
+import {ref} from 'vue';
 import {Navigation} from '../../../facades/router';
-import {Http} from '../../../facades/http';
-import {categoryStore} from '../../categories/store';
 import Form from '../components/Form.vue';
 
 const ticket = ref({
     title: '',
     category_id: '',
-});
-
-const categories = ref([
-    {
-        id: 0,
-        name: '',
-    }
-]);
-
-
-
-onMounted(async () => {
-    await categoryStore.actions.getAll();
-
-    categories.value = categoryStore.getters.all.value;
-    
 });
 
 const handleSubmit = async data => {

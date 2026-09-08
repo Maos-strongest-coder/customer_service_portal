@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+
+use App\Enums\UserRole;
 use App\Models\Ticket;
 use App\Http\Resources\TicketResource;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTicketRequest;
+
 
 
 
@@ -20,7 +22,7 @@ class TicketController extends Controller
         $userRole = Auth::user()->role;
         $userId = Auth::user()->id;
 
-        if ($userRole === 'admin') {
+        if ($userRole === UserRole::ADMIN) {
             $tickets = Ticket::with(['issuedBy', 'issuedTo'])->get();
         } else {
             $tickets = Ticket::with(['issuedBy', 'issuedTo'])->where('issued_by_id',  $userId)->get();
@@ -37,7 +39,6 @@ class TicketController extends Controller
         $ticket = Ticket::create([
             ...$request->validated(),
             'issued_by_id' => Auth::id(),
-            'status' => 'open',
         ]);
 
         return new TicketResource($ticket);
@@ -48,16 +49,10 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        $userRole = Auth::user()->role;
-        $userId = Auth::user()->id;
+        $this->authorize('view', $ticket);
 
         $ticket->load(['issuedBy', 'issuedTo', 'replies.user']);
-
-        if ($userRole !== 'admin' && $ticket->issued_by_id !== $userId) {
-            return response()->json([
-                'message' => 'You cannot view this ticket'
-            ], 400);
-        }
+        
         return new TicketResource($ticket);
     }
 
@@ -71,10 +66,10 @@ class TicketController extends Controller
         $userRole = Auth::user()->role;
         $userId = Auth::user()->id;
 
-        if ($userRole !== 'admin' && $ticket->issued_by_id !== $userId) {
+        if ($userRole !== UserRole::ADMIN && $ticket->issued_by_id !== $userId) {
             return response()->json([
                 'message' => 'You cannot update this ticket'
-            ], 400);
+            ], 403);
         }
         
 

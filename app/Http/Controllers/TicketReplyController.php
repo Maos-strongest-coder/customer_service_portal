@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRole;
 use App\Http\Requests\StoreTicketReplyRequest;
 use App\Http\Resources\TicketReplyResource;
 use App\Models\Ticket;
@@ -27,7 +28,9 @@ class TicketReplyController extends Controller
     public function update(UpdateTicketReplyRequest $request, Ticket $ticket, TicketReply $reply): TicketReplyResource
     {
         $userRole = Auth::user()->role;
-        if ($userRole === 'user') {
+        $userId = Auth::user()->id;
+
+        if ($userRole !== UserRole::ADMIN && $reply->user_id !== $userId) {
             abort(403, 'You are not allowed to edit this reply.');
         }
 

@@ -4,7 +4,7 @@ import {onMounted} from 'vue';
 import {authStore} from './domains/Auth/store';
 
 onMounted(async () => {
-    await authStore.actions.me();
+    await authStore.actions.me().catch(() => {});
 });
 </script>
 

@@ -22,16 +22,14 @@
                     <label for="status">Status:</label>
                     <select v-model="form.status" required>
                         <option disabled value="">Select a status</option>
-                        <option value="open">Open</option>
-                        <option value="started">In Progress</option>
-                        <option value="closed">Closed</option>
+                        <option v-for="status in ticketStatuses" :key="status.value" :value="status.value">{{ status.label }}</option>
                     </select>
                 </div>
 
                 <div>
                     <label for="issued_to">Issued To:</label>
                     <select v-model="form.issued_to_id" required>
-                        <option disabled value="">Select a user</option>
+                        <option disabled value="">Select an admin to pick up this ticket</option>
                         <option v-for="admin in admins" :key="admin.id" :value="admin.id">
                             {{ admin.full_name }}
                         </option>
@@ -52,6 +50,11 @@ import {isAdmin} from '../../Auth/store';
 const categories = categoryStore.getters.all;
 const users = userStore.getters.all;
 
+const ticketStatuses = [
+    {value: 'open', label: 'Open'},
+    {value: 'started', label: 'In Progress'},
+]
+
 onMounted(async () => {
     await categoryStore.actions.getAll();
     if (isAdmin.value) {
@@ -68,8 +71,9 @@ const props = defineProps({ticket: Object});
 const emit = defineEmits(['submit']);
 
 const form = ref({
-    ...props.ticket,
+    title: props.ticket?.title || '',
     category_id: props.ticket?.category?.id || '',
+    status: props.ticket?.status || '',
     issued_to_id: props.ticket?.issued_to?.id || '',
 });
 

@@ -18,6 +18,11 @@ const fetchNotes = async () => {
     notes.value = response.data || response || [];
 };
 
+const addNote = async message => {
+    await Http.post(`/tickets/${props.ticketId}/notes`, {message});
+    await fetchNotes();
+};
+
 const startEditNote = note => {
     editNoteId.value = note.id;
     editNoteMessage.value = note.message;
@@ -43,7 +48,7 @@ const handleDeleteNote = async noteId => {
     }
 };
 
-defineExpose({fetchNotes});
+defineExpose({fetchNotes, addNote});
 </script>
 
 <template>

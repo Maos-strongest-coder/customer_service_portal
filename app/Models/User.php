@@ -3,16 +3,18 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\UserRole;
 use Database\Factories\UserFactory;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
-use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Ticket;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['first_name', 'last_name', 'email', 'phone_number', 'role'])]
-#[Hidden(['password', 'remember_token'])]
+
+
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
@@ -28,6 +30,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => UserRole::class,
         ];
     }
 
@@ -44,13 +47,23 @@ class User extends Authenticatable
         'password',
     ];
 
-    public function tickets()
+        public function ticketsIssued(): HasMany
     {
-        return $this->hasMany(Ticket::class);
+        return $this->hasMany(Ticket::class, 'issued_by_id');
+    }
+
+    public function ticketsAssigned(): HasMany
+    {
+        return $this->hasMany(Ticket::class, 'issued_to_id');
     }
 
     public function notes()
     {
         return $this->hasMany(TicketNote::class);
+    }
+
+    public function replies(): HasMany
+    {
+        return $this->hasMany(TicketReply::class);
     }
 }

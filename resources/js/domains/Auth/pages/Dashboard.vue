@@ -9,11 +9,9 @@
 import {authStore} from '../store';
 import {Navigation} from '../../../facades/router';
 
-;
-
 const handleLogout = async () => {
     await authStore.actions.logout();
 
-    Navigation.to('dashboard');
+    Navigation.to('login');
 };
 </script>
