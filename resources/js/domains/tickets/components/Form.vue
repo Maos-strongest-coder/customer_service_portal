@@ -52,7 +52,7 @@ const users = userStore.getters.all;
 
 const ticketStatuses = [
     {value: 'open', label: 'Open'},
-    {value: 'started', label: 'In Progress'},
+    {value: 'in_progress', label: 'In Progress'},
 ]
 
 onMounted(async () => {

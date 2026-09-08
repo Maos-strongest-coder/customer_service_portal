@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRole;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
@@ -15,8 +16,8 @@ class TicketSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::where('role', 'user')->get();
-        $admins = User::where('role', 'admin')->get();
+        $users = User::where('role', UserRole::USER)->get();
+        $admins = User::where('role', UserRole::ADMIN)->get();
         $categories = Category::all();
 
         Ticket::factory()

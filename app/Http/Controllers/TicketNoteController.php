@@ -15,7 +15,7 @@ class TicketNoteController extends Controller
 {
     public function index(Ticket $ticket)
     {
-        $this->authorize('viewAny', TicketNote::class);
+        $this->authorize('view', TicketNote::class);
         
         $notes = $ticket->notes()->with('user')->get();
 
@@ -28,7 +28,7 @@ class TicketNoteController extends Controller
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $note = TicketNote::create([
+        $note = $ticket->notes()->create([
             ...$request->validated(),
             'user_id' => Auth::id(),
         ]);
