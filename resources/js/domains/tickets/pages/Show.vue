@@ -1,31 +1,18 @@
 <template>
     <div v-if="ticket">
-        <h2>ticket #{{ ticket?.id }}</h2>
+        <thead>
+            <TicketTableHeader :showActions="isAdmin" />
+        </thead>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Ticket ID</th>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Status</th>
-                    <th>Issued By</th>
-                    <th>Issued On</th>
-                    <th>Last Update On</th>
-                    <th>Issued To</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><TicketCard :ticket="ticket" /></tr>
-            </tbody>
-        </table>
+        <tbody>
+            <TicketCard :ticket="ticket" />
+        </tbody>
+        
 
         <template v-if="isAdmin">
             <NotesTable ref="notesTableRef" :ticketId="currentId" />
             <ChatBox :ticketId="ticket.id" type="note" @submit="handleChatSubmit" />
         </template>
-
         <div>
             <h2>Replies</h2>
 
@@ -69,6 +56,7 @@ import ChatBox from '../components/ChatBox.vue';
 import NotesTable from '../components/NotesTable.vue';
 import {Http} from '../../../facades/http';
 import {isAdmin} from '../../Auth/store';
+import TicketTableHeader from '../components/TicketTableHeader.vue';
 
 const currentId = ref(null);
 const notesTableRef = ref(null);
