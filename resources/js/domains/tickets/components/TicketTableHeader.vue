@@ -8,6 +8,16 @@
         <th>Issued On</th>
         <th>Last Update On</th>
         <th>Issued To</th>
-        <th>Actions</th>
+        <template v-if="showActions"><th>Actions</th></template>
+        
     </tr>
 </template>
+
+<script setup>
+const props = defineProps({
+    showActions: {
+        type: Boolean,
+        default: true,
+    },
+});
+</script>
