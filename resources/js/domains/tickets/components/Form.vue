@@ -36,7 +36,15 @@
                     </select>
                 </div>
             </template>
-            <button type="submit">Create Ticket</button>
+           
+            <button v-if="currentPage === 'create'" type="submit">
+                Create Ticket
+            </button>
+            
+            <button v-else-if="currentPage === 'edit'" type="submit">
+                Update Ticket
+            </button>
+            
         </form>
     </div>
 </template>
@@ -46,6 +54,11 @@ import {ref, onMounted, computed} from 'vue';
 import {categoryStore} from '../../categories/store';
 import {userStore} from '../../users/store';
 import {isAdmin} from '../../Auth/store';
+import { Navigation } from '../../../facades/router';
+import Create from '../pages/Create.vue';
+
+
+const currentPage = ref(Navigation.currentRoute().name);
 
 const categories = categoryStore.getters.all;
 const users = userStore.getters.all;
@@ -77,5 +90,17 @@ const form = ref({
     issued_to_id: props.ticket?.issued_to?.id || '',
 });
 
-const handleSubmit = () => emit('submit', form.value);
+const handleSubmit = () => {
+    const formData = { ...form.value };
+
+    if (!formData.status || formData.status === '') {
+        delete formData.status;
+    }
+    
+    if (!formData.issued_to_id || formData.issued_to_id === '') {
+        delete formData.issued_to_id;
+    }
+
+    emit('submit', formData);
+};
 </script>
