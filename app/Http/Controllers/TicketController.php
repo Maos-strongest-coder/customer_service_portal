@@ -8,6 +8,7 @@ use App\Models\Ticket;
 use App\Http\Resources\TicketResource;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTicketRequest;
+use App\Http\Requests\UpdateTicketRequest;
 
 
 
@@ -23,9 +24,9 @@ class TicketController extends Controller
         $userId = Auth::user()->id;
 
         if ($userRole === UserRole::ADMIN) {
-            $tickets = Ticket::with(['issuedBy', 'issuedTo'])->get();
+            $tickets = Ticket::with(['issuedBy', 'issuedTo', 'category'])->get();
         } else {
-            $tickets = Ticket::with(['issuedBy', 'issuedTo'])->where('issued_by_id',  $userId)->get();
+            $tickets = Ticket::with(['issuedBy', 'issuedTo', 'category'])->where('issued_by_id',  $userId)->get();
         }
 
         return TicketResource::collection($tickets);
@@ -51,7 +52,7 @@ class TicketController extends Controller
     {
         $this->authorize('view', $ticket);
 
-        $ticket->load(['issuedBy', 'issuedTo', 'replies.user']);
+        $ticket->load(['issuedBy', 'issuedTo', 'replies.user', 'category']);
         
         return new TicketResource($ticket);
     }
@@ -59,7 +60,7 @@ class TicketController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreTicketRequest $request, string $id)
+    public function update(UpdateTicketRequest $request, string $id)
     {
         $ticket = Ticket::findOrFail($id);
 
