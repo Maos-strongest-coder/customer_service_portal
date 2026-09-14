@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-import {computed, watch, ref} from 'vue';
+import {computed, watch, ref, nextTick} from 'vue';
 import {ticketStore} from '../store';
 import {Navigation} from '../../../facades/router';
 import TicketCard from '../components/TicketCard.vue';
@@ -92,16 +92,26 @@ const cancelEditReply = () => {
 };
 
 watch(
-    [() => Navigation.currentRoute().params.id, isAdmin],
-    async ([id, admin]) => {
+    () => Navigation.currentRoute().params.id,
+    async (id) => {
         if (!id) return;
-        currentId.value = id;
-        await ticketStore.actions.getOne({id});
-        if (admin && notesTableRef.value) {
-            await notesTableRef.value.fetchNotes()
-        }
 
-    })
+        currentId.value = id;
+
+        await ticketStore.actions.getOne({ id });
+        
+
+        if (isAdmin.value) {
+            await nextTick();
+
+            if (notesTableRef.value) {
+                await notesTableRef.value.fetchNotes();
+            }
+        }
+    },
+
+    { immediate: true }
+);
 
 const handleChatSubmit = async formData => {
     if (formData.type === 'note') {
