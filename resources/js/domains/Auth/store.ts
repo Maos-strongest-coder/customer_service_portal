@@ -25,6 +25,19 @@ authStore.actions = { ...authStore.actions,
         authStore.setters.setOne(null);
     },
 
+    register: async (registrationData: {first_name: string, last_name: string, email: string, password: string, password_confirmation: string}) => {
+      
+        await axios.get('/sanctum/csrf-cookie', {withCredentials: true});
+        
+        const response = await Http.post('register', registrationData);
+
+        const user =  response.data ? response.data : response;
+
+        if (!user) return;
+
+        authStore.setters.setOne(user);
+    },
+
     me: async () => {
         const data = await Http.get('me');
 

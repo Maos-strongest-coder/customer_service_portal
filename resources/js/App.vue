@@ -17,6 +17,8 @@ onMounted(async () => {
         <router-link :to="{name: 'overview'}">Overview</router-link>
         |
         <router-link :to="{name: 'create'}">Report an Issue</router-link>
+        |
+        <router-link :to="{name: 'register'}">Register an Account</router-link>
     </nav>
     <ErrorMessage />
 
