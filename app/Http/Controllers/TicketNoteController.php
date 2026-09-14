@@ -15,7 +15,8 @@ class TicketNoteController extends Controller
 {
     public function index(Ticket $ticket)
     {
-        $this->authorize('view', TicketNote::class);
+        
+        $this->authorize('viewAny', TicketNote::class);
         
         $notes = $ticket->notes()->with('user')->get();
 
@@ -24,7 +25,10 @@ class TicketNoteController extends Controller
 
     public function store(StoreTicketNoteRequest $request, Ticket $ticket) 
     {
-        if (Auth::user()->role !== UserRole::ADMIN) {
+        $userRole = Auth::user()->role;
+        $isAdmin = $userRole === UserRole::ADMIN || $userRole === UserRole::ADMIN->value;
+
+        if (!$isAdmin) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
@@ -51,7 +55,7 @@ class TicketNoteController extends Controller
 
     public function destroy(Ticket $ticket, TicketNote $note)
     {
-        $this->authorize('update', $note);
+        $this->authorize('delete', $note);
 
         $note->delete();
 
