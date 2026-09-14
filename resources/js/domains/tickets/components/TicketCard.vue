@@ -1,41 +1,43 @@
 <template>
-    <td>
-        {{ ticket?.id }}
-    </td>
-    <td>
-        {{ ticket?.title }}
-    </td>
-
-    <td>
-        {{ ticket?.category?.name }}
-    </td>
-    <td>
-        {{ ticket?.status }}
-    </td>
-    <td>
-        {{ ticket?.issued_by?.full_name }}
-    </td>
-    <td>
-        {{ ticket?.created_at }}
-    </td>
-    <td>
-        {{ ticket?.updated_at }}
-    </td>
-    <td>
-        {{ ticket?.issued_to?.full_name }}
-    </td>
-
-    <template v-if="showActions">
-        <td v-if="canManage">
-            <button @click.stop="Navigation.to('edit', {id: ticket?.id})">Edit</button>
-            |
-            <button class="delete">Delete</button>
+    <tr>
+        <td>
+            {{ ticket?.id }}
+        </td>
+        <td>
+            {{ ticket?.title }}
         </td>
 
-        <td v-else>
-            <span>Not Authorized</span>
+        <td>
+            {{ ticket?.category?.name }}
         </td>
-    </template>
+        <td>
+            {{ ticket?.status }}
+        </td>
+        <td>
+            {{ ticket?.issued_by?.full_name }}
+        </td>
+        <td>
+            {{ ticket?.created_at }}
+        </td>
+        <td>
+            {{ ticket?.updated_at }}
+        </td>
+        <td>
+            {{ ticket?.issued_to?.full_name }}
+        </td>
+
+        <template v-if="showActions">
+            <td v-if="canManage">
+                <button @click.stop="Navigation.to('edit', {id: ticket?.id})">Edit</button>
+                |
+                <button class="delete">Delete</button>
+            </td>
+
+            <td v-else>
+                <span>Not Authorized</span>
+            </td>
+        </template>
+    </tr>
 </template>
 
 <script setup>
