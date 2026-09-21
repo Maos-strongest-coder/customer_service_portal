@@ -16,8 +16,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::get('/users', [UserController::class, 'index']);
 
-    Route::apiResource('categories', CategoryController::class)->only('index');
-    
+    Route::apiResource('categories', CategoryController::class)->except('show');
+
     Route::apiResource('tickets', TicketController::class);
 
     Route::apiResource('tickets.replies', TicketReplyController::class)
