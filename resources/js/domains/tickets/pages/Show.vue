@@ -11,8 +11,9 @@
 
         <template v-if="isAdmin">
             <NotesTable ref="notesTableRef" :ticketId="currentId" />
-            <ChatBox :ticketId="ticket.id" type="note" @submit="handleChatSubmit" />
+            <ChatBox placeholder="Write an internal note here..." buttonLabel="Add Note" @submit="handleAddNote" />
         </template>
+
         <div>
             <h2>Replies</h2>
 
@@ -42,7 +43,7 @@
 
             <div v-else>No replies yet.</div>
 
-            <ChatBox v-if="isAdmin" :ticketId="ticket.id" type="reply" @submit="handleChatSubmit" />
+            <ChatBox v-if="isAdmin || ticket.issued_by?.id === currentUser?.id" placeholder="Write a reply here..." buttonLabel="Send" @submit="handleAddReply" />
         </div>
     </div>
 </template>
@@ -52,10 +53,10 @@ import {computed, watch, ref, nextTick} from 'vue';
 import {ticketStore} from '../store';
 import {Navigation} from '../../../facades/router';
 import TicketCard from '../components/TicketCard.vue';
-import ChatBox from '../components/ChatBox.vue';
+import ChatBox from '../../components/ChatBox.vue';
 import NotesTable from '../components/NotesTable.vue';
 import {Http} from '../../../facades/http';
-import {isAdmin} from '../../Auth/store';
+import {isAdmin, currentUser} from '../../Auth/store';
 import TicketTableHeader from '../components/TicketTableHeader.vue';
 
 const currentId = ref(null);
@@ -101,15 +102,13 @@ watch(
     { immediate: true }
 );
 
-const handleChatSubmit = async formData => {
-    if (formData.type === 'note') {
-        await notesTableRef.value.addNote(formData.message);
-    } else {
-        await Http.post(`/tickets/${formData.ticketId}/replies`, {
-            message: formData.message,
-        });
-        await ticketStore.actions.getOne({id: formData.ticketId});
-    }
+const handleAddNote = async message => {
+    await notesTableRef.value.addNote(message);
+};
+
+const handleAddReply = async message => {
+    await Http.post(`/tickets/${currentId.value}/replies`, {message});
+    await ticketStore.actions.getOne({id: currentId.value});
 };
 
 const handleUpdateReplySubmit = async replyId => {
