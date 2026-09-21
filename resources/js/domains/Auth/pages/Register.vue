@@ -49,6 +49,6 @@ const form = ref({
 
 const handleRegister = async () => {
     await authStore.actions.register(form.value);
-    Navigation.to('overview');
+    Navigation.to('tickets.overview');
 };
 </script>

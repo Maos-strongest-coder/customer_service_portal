@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>Create a Ticket</h1>
-        <Form :ticket="ticket" @submit="handleSubmit" />
+        <Form :ticket="ticket" mode="create" @submit="handleSubmit" />
     </div>
 </template>
 
@@ -19,7 +19,7 @@ const ticket = ref({
 const handleSubmit = async data => {
     await ticketStore.actions.create(data);
 
-    Navigation.to('overview');
+    Navigation.to('tickets.overview');
 
 
 };

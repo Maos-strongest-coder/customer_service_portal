@@ -28,7 +28,7 @@
 
         <template v-if="showActions">
             <td v-if="canManage">
-                <button @click.stop="Navigation.to('edit', {id: ticket?.id})">Edit</button>
+                <button @click.stop="Navigation.to('tickets.edit', {id: ticket?.id})">Edit</button>
                 |
                 <button class="delete">Delete</button>
             </td>

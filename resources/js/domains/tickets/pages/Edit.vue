@@ -14,7 +14,7 @@
         
         <h2>Update Ticket</h2>
         
-        <Form v-if="ticket" :ticket="ticket" @submit="handleSubmit" />
+        <Form v-if="ticket" :ticket="ticket" mode="edit" @submit="handleSubmit" />
     </div>
 </template>
 
@@ -37,6 +37,6 @@ const ticket = computed(() => ticketStore.getters.getById(ticketId).value);
 const handleSubmit = async (data) => {
     await ticketStore.actions.update(ticketId, data);
     
-    Navigation.to('show', { id: ticketId });
+    Navigation.to('tickets.show', { id: ticketId });
 };
 </script>

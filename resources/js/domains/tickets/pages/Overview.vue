@@ -6,7 +6,7 @@
                 v-for="ticket in tickets"
                 :key="ticket?.id"
                 :ticket="ticket" 
-                @click="Navigation.to('show', {id: ticket?.id})"/>
+                @click="Navigation.to('tickets.show', {id: ticket?.id})"/>
         </tbody>
     </table>
 </template>
