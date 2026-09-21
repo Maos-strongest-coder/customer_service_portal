@@ -46,6 +46,10 @@ authStore.actions = { ...authStore.actions,
         authStore.setters.setOne(data.user);
         return data.user;
     },
+
+    // verifyEmail: async () =>
+
+    // resendVerification: async () =>
 } 
 
 export const currentUser = computed(() => authStore.getters.all.value[0] || null);
