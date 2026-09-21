@@ -60,20 +60,9 @@ class TicketController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTicketRequest $request, string $id)
+    public function update(UpdateTicketRequest $request, Ticket $ticket): TicketResource
     {
-        $ticket = Ticket::findOrFail($id);
-
-        $userRole = Auth::user()->role;
-        $userId = Auth::user()->id;
-
-        if ($userRole !== UserRole::ADMIN && $ticket->issued_by_id !== $userId) {
-            return response()->json([
-                'message' => 'You cannot update this ticket'
-            ], 403);
-        }
-        
-
+        $this->authorize('update', $ticket);
         $ticket->update($request->validated());
 
         return new TicketResource($ticket);
@@ -82,8 +71,12 @@ class TicketController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Ticket $ticket)
     {
-        //
+        $this->authorize('delete', $ticket);
+
+        $ticket->delete();
+        
+        return response()->json(['message' => 'Ticket deleted successfully']);
     }
 }

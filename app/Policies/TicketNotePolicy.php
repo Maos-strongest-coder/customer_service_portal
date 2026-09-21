@@ -26,6 +26,11 @@ class TicketNotePolicy
         return false; 
     }
 
+    public function create(User $user): bool
+{
+    return false;
+}
+
     public function update(User $user, TicketNote $note): bool
     {
         return false;

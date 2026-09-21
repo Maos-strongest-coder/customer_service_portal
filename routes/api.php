@@ -17,7 +17,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/users', [UserController::class, 'index']);
 
     Route::apiResource('categories', CategoryController::class)->only('index');
-    Route::apiResource('tickets', TicketController::class)->except('destroy');
+    
+    Route::apiResource('tickets', TicketController::class);
 
     Route::apiResource('tickets.replies', TicketReplyController::class)
         ->only(['store', 'update'])
