@@ -1,8 +1,28 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import {authRoutes} from '../domains/Auth/routes.js';
 import {ticketRoutes} from '../domains/tickets/routes.js';
+import { categoryRoutes } from '../domains/categories/routes.js';
+import { authReady, currentUser, isAdmin } from '../domains/Auth/store.js';
 
 export const router = createRouter({
     history: createWebHistory(),
-    routes: [...authRoutes, ...ticketRoutes],
+    routes: [...authRoutes, ...ticketRoutes, ...categoryRoutes,],
+});
+
+router.beforeEach(async to => {
+    await authReady;
+
+    const isLoggedIn = !!currentUser.value;
+
+    if (to.meta.requiresAuth && !isLoggedIn) {
+        return {name: 'login'};
+    }
+
+    if (to.meta.requiresAdmin && !isAdmin.value) {
+        return {name: 'dashboard'};
+    }
+
+    if (to.meta.guestOnly && isLoggedIn) {
+        return {name: 'dashboard'};
+    }
 });

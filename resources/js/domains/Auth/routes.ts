@@ -4,7 +4,7 @@ import Register from './pages/register.vue';
 
 
 export const authRoutes = [
-    {path: '/', component: Dashboard, name: 'dashboard'},
-    {path: '/login', component: Login, name: 'login'},
-    {path: '/register', component: Register, name: 'register' }
+    {path: '/', component: Dashboard, name: 'dashboard', meta: {requiresAuth: true}},
+    {path: '/login', component: Login, name: 'login', meta: {guestOnly: true}},
+    {path: '/register', component: Register, name: 'register', meta: {guestOnly: true}},
 ];
