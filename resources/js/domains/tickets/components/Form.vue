@@ -37,13 +37,7 @@
                 </div>
             </template>
            
-            <button v-if="currentPage === 'create'" type="submit">
-                Create Ticket
-            </button>
-            
-            <button v-else-if="currentPage === 'edit'" type="submit">
-                Update Ticket
-            </button>
+            <button type="submit">{{ mode === 'edit' ? 'Update Ticket' : 'Create Ticket' }}</button>
             
         </form>
     </div>
@@ -54,11 +48,6 @@ import {ref, onMounted, computed} from 'vue';
 import {categoryStore} from '../../categories/store';
 import {userStore} from '../../users/store';
 import {isAdmin} from '../../Auth/store';
-import { Navigation } from '../../../facades/router';
-import Create from '../pages/Create.vue';
-
-
-const currentPage = ref(Navigation.currentRoute().name);
 
 const categories = categoryStore.getters.all;
 const users = userStore.getters.all;
@@ -79,7 +68,13 @@ const admins = computed(() => {
     return (users.value || []).filter(user => user.role === 'admin');
 });
 
-const props = defineProps({ticket: Object});
+const props = defineProps({
+    ticket: Object,
+    mode:{
+        type: String,
+        default: 'create',
+    },
+});
 
 const emit = defineEmits(['submit']);
 
