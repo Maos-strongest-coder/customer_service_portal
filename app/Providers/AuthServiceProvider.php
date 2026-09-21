@@ -1,11 +1,13 @@
 <?php
 namespace App\Providers;
 
+use App\Models\Category;
 use App\Models\Ticket;
 use App\Policies\TicketPolicy;
 use App\Models\TicketNote;
 use App\Models\TicketReply;
 use App\Models\User;
+use App\Policies\CategoryPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\TicketReplyPolicy;
 use App\Policies\TicketNotePolicy;
@@ -24,6 +26,7 @@ class AuthServiceProvider extends ServiceProvider
         TicketNote::class => TicketNotePolicy::class,
         TicketReply::class => TicketReplyPolicy::class,
         User::class => UserPolicy::class,
+        Category::class => CategoryPolicy::class,
     ];
 
 }
