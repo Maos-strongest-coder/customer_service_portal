@@ -29,6 +29,10 @@ export const storeModuleFactory = (moduleName: string) => {
         deleteByItem: (item: {id: string | number}) => {
             delete state.value[item.id];
         },
+
+        clear: () => {
+            state.value = {};
+        },
     };
 
     const actions: Record<string, (...args: any[]) => Promise<any>> = {
