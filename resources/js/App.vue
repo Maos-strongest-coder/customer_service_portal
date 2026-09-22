@@ -15,6 +15,8 @@ import ErrorMessage from './domains/components/ErrorMessage.vue';
         <router-link :to="{name: 'register'}">Register an Account</router-link>
         |
         <router-link :to="{name: 'categories.overview'}">Categories</router-link>
+        |
+        <router-link :to="{name: 'users.overview'}">View Users</router-link>
     </nav>
     <ErrorMessage />
 

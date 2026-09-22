@@ -1,13 +1,12 @@
 <template>
     <div v-if="ticket">
         <thead>
-            <TicketTableHeader :showActions="isAdmin" />
+            <TicketTableHeader />
         </thead>
 
         <tbody>
             <TicketCard :ticket="ticket" />
         </tbody>
-        
 
         <template v-if="isAdmin">
             <NotesTable ref="notesTableRef" :ticketId="currentId" />
@@ -43,7 +42,12 @@
 
             <div v-else>No replies yet.</div>
 
-            <ChatBox v-if="isAdmin || ticket.issued_by?.id === currentUser?.id" placeholder="Write a reply here..." buttonLabel="Send" @submit="handleAddReply" />
+            <ChatBox
+                v-if="isAdmin || ticket.issued_by?.id === currentUser?.id"
+                placeholder="Write a reply here..."
+                buttonLabel="Send"
+                @submit="handleAddReply"
+            />
         </div>
     </div>
 </template>
@@ -82,13 +86,12 @@ const cancelEditReply = () => {
 
 watch(
     () => Navigation.currentRoute().params.id,
-    async (id) => {
+    async id => {
         if (!id) return;
 
         currentId.value = id;
 
-        await ticketStore.actions.getOne({ id });
-        
+        await ticketStore.actions.getOne({id});
 
         if (isAdmin.value) {
             await nextTick();
@@ -99,7 +102,7 @@ watch(
         }
     },
 
-    { immediate: true }
+    {immediate: true},
 );
 
 const handleAddNote = async message => {

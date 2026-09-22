@@ -8,14 +8,6 @@ use App\Models\Category;
 
 class CategoryPolicy
 {
-    /**
-     * Create a new policy instance.
-     */
-    public function __construct()
-    {
-        //
-    }
-
     public function create(User $user): bool
     {
         return $user->role === UserRole::ADMIN;
