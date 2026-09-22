@@ -16,7 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::get('/users', [UserController::class, 'index']);
 
-    Route::apiResource('users', UserController::class)->only('index', 'update', 'destroy');
+    Route::apiResource('users', UserController::class);
 
     Route::apiResource('categories', CategoryController::class)->except('show');
 
