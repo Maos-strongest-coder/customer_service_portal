@@ -4,23 +4,21 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Enums\UserRole;
+use App\Models\Category;
 
-class UserPolicy
+class CategoryPolicy
 {
-    /**
-     * Create a new policy instance.
-     */
-    public function viewAny(User $user): bool
+    public function create(User $user): bool
     {
         return $user->role === UserRole::ADMIN;
     }
 
-    public function update(User $user): bool
+    public function update(User $user, Category $category): bool
     {
         return $user->role === UserRole::ADMIN;
     }
 
-    public function delete(User $user): bool
+    public function delete(User $user, Category $category): bool
     {
         return $user->role === UserRole::ADMIN;
     }

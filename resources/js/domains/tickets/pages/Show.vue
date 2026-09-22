@@ -1,29 +1,16 @@
 <template>
     <div v-if="ticket">
-        <h2>ticket #{{ ticket?.id }}</h2>
+        <thead>
+            <TicketTableHeader />
+        </thead>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Ticket ID</th>
-                    <th>Title</th>
-                    <th>Category</th>
-                    <th>Status</th>
-                    <th>Issued By</th>
-                    <th>Issued On</th>
-                    <th>Last Update On</th>
-                    <th>Issued To</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><TicketCard :ticket="ticket" /></tr>
-            </tbody>
-        </table>
+        <tbody>
+            <TicketCard :ticket="ticket" />
+        </tbody>
 
         <template v-if="isAdmin">
             <NotesTable ref="notesTableRef" :ticketId="currentId" />
-            <ChatBox :ticketId="ticket.id" type="note" @submit="handleChatSubmit" />
+            <ChatBox placeholder="Write an internal note here..." buttonLabel="Add Note" @submit="handleAddNote" />
         </template>
 
         <div>
@@ -55,20 +42,26 @@
 
             <div v-else>No replies yet.</div>
 
-            <ChatBox v-if="isAdmin" :ticketId="ticket.id" type="reply" @submit="handleChatSubmit" />
+            <ChatBox
+                v-if="isAdmin || ticket.issued_by?.id === currentUser?.id"
+                placeholder="Write a reply here..."
+                buttonLabel="Send"
+                @submit="handleAddReply"
+            />
         </div>
     </div>
 </template>
 
 <script setup>
-import {computed, watch, ref} from 'vue';
+import {computed, watch, ref, nextTick} from 'vue';
 import {ticketStore} from '../store';
 import {Navigation} from '../../../facades/router';
 import TicketCard from '../components/TicketCard.vue';
-import ChatBox from '../components/ChatBox.vue';
+import ChatBox from '../../components/ChatBox.vue';
 import NotesTable from '../components/NotesTable.vue';
 import {Http} from '../../../facades/http';
-import {isAdmin} from '../../Auth/store';
+import {isAdmin, currentUser} from '../../Auth/store';
+import TicketTableHeader from '../components/TicketTableHeader.vue';
 
 const currentId = ref(null);
 const notesTableRef = ref(null);
@@ -92,26 +85,33 @@ const cancelEditReply = () => {
 };
 
 watch(
-    [() => Navigation.currentRoute().params.id, isAdmin],
-    async ([id, admin]) => {
+    () => Navigation.currentRoute().params.id,
+    async id => {
         if (!id) return;
+
         currentId.value = id;
+
         await ticketStore.actions.getOne({id});
-        if (admin && notesTableRef.value) {
-            await notesTableRef.value.fetchNotes()
+
+        if (isAdmin.value) {
+            await nextTick();
+
+            if (notesTableRef.value) {
+                await notesTableRef.value.fetchNotes();
+            }
         }
+    },
 
-    })
+    {immediate: true},
+);
 
-const handleChatSubmit = async formData => {
-    if (formData.type === 'note') {
-        await notesTableRef.value.addNote(formData.message);
-    } else {
-        await Http.post(`/tickets/${formData.ticketId}/replies`, {
-            message: formData.message,
-        });
-        await ticketStore.actions.getOne({id: formData.ticketId});
-    }
+const handleAddNote = async message => {
+    await notesTableRef.value.addNote(message);
+};
+
+const handleAddReply = async message => {
+    await Http.post(`/tickets/${currentId.value}/replies`, {message});
+    await ticketStore.actions.getOne({id: currentId.value});
 };
 
 const handleUpdateReplySubmit = async replyId => {

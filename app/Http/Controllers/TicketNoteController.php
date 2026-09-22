@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\UserRole;
 use App\Http\Requests\StoreTicketNoteRequest;
 use App\Models\Ticket;
-
 use App\Http\Resources\TicketNoteResource;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UpdateTicketNoteRequest;
@@ -15,6 +13,7 @@ class TicketNoteController extends Controller
 {
     public function index(Ticket $ticket)
     {
+        
         $this->authorize('viewAny', TicketNote::class);
         
         $notes = $ticket->notes()->with('user')->get();
@@ -22,19 +21,14 @@ class TicketNoteController extends Controller
         return TicketNoteResource::collection($notes);
     }
 
-    public function store(StoreTicketNoteRequest $request, Ticket $ticket) 
+    public function store(StoreTicketNoteRequest $request, Ticket $ticket)
     {
-        if (Auth::user()->role !== UserRole::ADMIN) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
+        $this->authorize('create', TicketNote::class);
 
-        $note = $ticket->notes()->create([
-            ...$request->validated(),
-            'user_id' => Auth::id(),
-        ]);
+        $note = $ticket->notes()->create([...$request->validated(), 'user_id' => Auth::id()]);
 
         $note->load('user');
-
+        
         return new TicketNoteResource($note);
     }
 
@@ -51,7 +45,7 @@ class TicketNoteController extends Controller
 
     public function destroy(Ticket $ticket, TicketNote $note)
     {
-        $this->authorize('update', $note);
+        $this->authorize('delete', $note);
 
         $note->delete();
 

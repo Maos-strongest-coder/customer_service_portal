@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -15,19 +16,15 @@ class LoginController extends Controller
 
         $attempt = Auth::attempt($credentials);
 
-        if (($attempt)) {
-            $request->session()->regenerate();
-
-            return response()->json($request->user());
+        if ((!$attempt)) {
+            throw ValidationException::withMessages([
+                'email' => 'The provided credentials do not match our records.'
+            ]);
         }
 
-        return response()->json([
-            'message' => 'The provided credentials do not match our records.',
-            'errors' => [
-                'email' => ['The provided email does not match our records.'],
-                'password' => ['The provided password does not match our records.'],
-            ],
-        ], 422);
+        $request->session()->regenerate();
+
+        return response()->json($request->user());
     }
 
     public function logout(Request $request)

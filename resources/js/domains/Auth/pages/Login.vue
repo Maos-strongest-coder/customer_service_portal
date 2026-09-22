@@ -11,6 +11,6 @@ import {Navigation} from '../../../facades/router.js';
 
 const handleSubmit = async credentials => {
     await authStore.actions.login(credentials);
-    Navigation.to('overview');
+    Navigation.to('tickets.overview');
 };
 </script>

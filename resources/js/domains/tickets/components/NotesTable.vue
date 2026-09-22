@@ -1,6 +1,7 @@
 <script setup>
 import {ref} from 'vue';
 import {Http} from '../../../facades/http';
+import {isAdmin} from '../../Auth/store';
 
 const props = defineProps({
     ticketId: {
@@ -14,6 +15,9 @@ const editNoteId = ref(null);
 const editNoteMessage = ref('');
 
 const fetchNotes = async () => {
+    if (!isAdmin) {
+        return 
+    }
     const response = await Http.get(`/tickets/${props.ticketId}/notes`);
     notes.value = response.data || response || [];
 };

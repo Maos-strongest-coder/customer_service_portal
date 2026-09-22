@@ -36,7 +36,9 @@
                     </select>
                 </div>
             </template>
-            <button type="submit">Create Ticket</button>
+           
+            <button type="submit">{{ mode === 'edit' ? 'Update Ticket' : 'Create Ticket' }}</button>
+            
         </form>
     </div>
 </template>
@@ -66,7 +68,13 @@ const admins = computed(() => {
     return (users.value || []).filter(user => user.role === 'admin');
 });
 
-const props = defineProps({ticket: Object});
+const props = defineProps({
+    ticket: Object,
+    mode:{
+        type: String,
+        default: 'create',
+    },
+});
 
 const emit = defineEmits(['submit']);
 
@@ -77,5 +85,17 @@ const form = ref({
     issued_to_id: props.ticket?.issued_to?.id || '',
 });
 
-const handleSubmit = () => emit('submit', form.value);
+const handleSubmit = () => {
+    const formData = { ...form.value };
+
+    if (!formData.status || formData.status === '') {
+        delete formData.status;
+    }
+    
+    if (!formData.issued_to_id || formData.issued_to_id === '') {
+        delete formData.issued_to_id;
+    }
+
+    emit('submit', formData);
+};
 </script>

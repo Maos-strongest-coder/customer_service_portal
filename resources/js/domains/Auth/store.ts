@@ -2,12 +2,17 @@ import {storeModuleFactory} from '../../factories/storeFactory';
 import {Http} from '../../facades/http';
 import { computed } from 'vue';
 import axios from 'axios';
+import {ticketStore} from '../tickets/store';
+import {categoryStore} from '../categories/store';
+import {userStore} from '../users/store';
 
 export const authStore = {
     ...storeModuleFactory('auth'),
 };
 
-authStore.actions = { ...authStore.actions, 
+authStore.actions = { 
+    ...authStore.actions,
+
     login: async (credentials: {email: string, password: string}) => {
         await axios.get('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await Http.post('login', credentials);
@@ -22,17 +27,35 @@ authStore.actions = { ...authStore.actions,
     logout: async () => {
         await Http.post('logout');
 
-        authStore.setters.setOne(null);
+        authStore.setters.clear();
+        ticketStore.setters.clear();
+        categoryStore.setters.clear();
+        userStore.setters.clear();
+    },
+
+    register: async (registrationData: {first_name: string, last_name: string, email: string, password: string, password_confirmation: string}) => {
+      
+        await axios.get('/sanctum/csrf-cookie', {withCredentials: true});
+        
+        const user = await Http.post('register', registrationData);
+
+        if (!user) return;
+
+        authStore.setters.setOne(user);
     },
 
     me: async () => {
-        const data = await Http.get('me');
+        const user = await Http.get('me');
 
-        if (!data?.user) return null;
+        if (!user) return null;
 
-        authStore.setters.setOne(data.user);
-        return data.user;
+        authStore.setters.setOne(user);
+        return user;
     },
+
+    // verifyEmail: async () =>
+
+    // resendVerification: async () =>
 } 
 
 export const currentUser = computed(() => authStore.getters.all.value[0] || null);
@@ -40,3 +63,5 @@ export const currentUser = computed(() => authStore.getters.all.value[0] || null
 export const isAdmin = computed(() => currentUser.value?.role === 'admin');
 
 export const getRole = computed(() => currentUser.value?.role || 'user');
+
+export const authReady = authStore.actions.me().catch(() => {});

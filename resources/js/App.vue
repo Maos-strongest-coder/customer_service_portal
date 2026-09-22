@@ -1,11 +1,5 @@
 <script setup lang="ts">
 import ErrorMessage from './domains/components/ErrorMessage.vue';
-import {onMounted} from 'vue';
-import {authStore} from './domains/Auth/store';
-
-onMounted(async () => {
-    await authStore.actions.me().catch(() => {});
-});
 </script>
 
 <template>
@@ -14,9 +8,15 @@ onMounted(async () => {
         |
         <router-link :to="{name: 'login'}">Login</router-link>
         |
-        <router-link :to="{name: 'overview'}">Overview</router-link>
+        <router-link :to="{name: 'tickets.overview'}">Tickets</router-link>
         |
-        <router-link :to="{name: 'create'}">Report an Issue</router-link>
+        <router-link :to="{name: 'tickets.create'}">Report an Issue</router-link>
+        |
+        <router-link :to="{name: 'register'}">Register an Account</router-link>
+        |
+        <router-link :to="{name: 'categories.overview'}">Categories</router-link>
+        |
+        <router-link :to="{name: 'users.overview'}">View Users</router-link>
     </nav>
     <ErrorMessage />
 

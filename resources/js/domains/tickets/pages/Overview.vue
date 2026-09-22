@@ -1,9 +1,13 @@
 <template>
     <table>
         <thead><TicketTableHeader /></thead>
-        <tbody><tr v-for="ticket in tickets" :key="ticket?.id" @click="Navigation.to('show', {id: ticket?.id})">
-            <TicketCard :ticket="ticket" />
-        </tr></tbody>
+        <tbody>
+            <TicketCard 
+                v-for="ticket in tickets"
+                :key="ticket?.id"
+                :ticket="ticket" 
+                @click="Navigation.to('tickets.show', {id: ticket?.id})"/>
+        </tbody>
     </table>
 </template>
 
