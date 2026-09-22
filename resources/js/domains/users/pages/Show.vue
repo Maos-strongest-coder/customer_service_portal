@@ -39,8 +39,8 @@ watch(
         </thead>
 
         <tbody>
-            <UserCard :user="user" />
+            <UserCard :user="user" mode="detail"/>
         </tbody>
     </table>
 </template>
-a
+
