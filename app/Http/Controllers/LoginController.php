@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -24,7 +25,7 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-        return response()->json($request->user());
+        return new UserResource($request->user());
     }
 
     public function logout(Request $request)

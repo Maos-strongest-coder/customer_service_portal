@@ -29,7 +29,7 @@ http.interceptors.response.use(
     },
     error => {
         if (error.response?.data?.message) {
-        setMessage(error.response.data.message);
+            setMessage(error.response.data.message);
         }
         if (error.response?.status === 422) {
             setErrorBag(error.response.data.errors);
@@ -37,5 +37,6 @@ http.interceptors.response.use(
         return Promise.reject(error);
     },
 );
+export const getCsrfCookie = () => axios.get('/sanctum/csrf-cookie', {withCredentials: true});
 
 export default http;

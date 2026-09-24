@@ -60,13 +60,17 @@ authStore.actions = {
 
     // verifyEmail: async () =>
 
-    // resendVerification: async () =>
+    resendVerification: async () => {
+        return Http.post('email/verification-notification');
+    },
 };
 
 export const currentUser = computed(() => authStore.getters.all.value[0] || null);
 
 export const isAdmin = computed(() => currentUser.value?.role === 'admin');
 
+export const isVerified = computed(() => !!currentUser.value?.email_verified_at);
+
 export const getRole = computed(() => currentUser.value?.role || 'user');
 
-// export const authReady = authStore.actions.me().catch(() => {});
+export const authReady = authStore.actions.me().catch(() => {});
