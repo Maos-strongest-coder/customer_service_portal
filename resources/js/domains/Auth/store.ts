@@ -1,6 +1,6 @@
 import {storeModuleFactory} from '../../factories/storeFactory';
 import {Http} from '../../facades/http';
-import { computed } from 'vue';
+import {computed} from 'vue';
 import axios from 'axios';
 import {ticketStore} from '../tickets/store';
 import {categoryStore} from '../categories/store';
@@ -10,10 +10,10 @@ export const authStore = {
     ...storeModuleFactory('auth'),
 };
 
-authStore.actions = { 
+authStore.actions = {
     ...authStore.actions,
 
-    login: async (credentials: {email: string, password: string}) => {
+    login: async (credentials: {email: string; password: string}) => {
         await axios.get('/sanctum/csrf-cookie', {withCredentials: true});
         const response = await Http.post('login', credentials);
 
@@ -33,10 +33,15 @@ authStore.actions = {
         userStore.setters.clear();
     },
 
-    register: async (registrationData: {first_name: string, last_name: string, email: string, password: string, password_confirmation: string}) => {
-      
+    register: async (registrationData: {
+        first_name: string;
+        last_name: string;
+        email: string;
+        password: string;
+        password_confirmation: string;
+    }) => {
         await axios.get('/sanctum/csrf-cookie', {withCredentials: true});
-        
+
         const user = await Http.post('register', registrationData);
 
         if (!user) return;
@@ -56,7 +61,7 @@ authStore.actions = {
     // verifyEmail: async () =>
 
     // resendVerification: async () =>
-} 
+};
 
 export const currentUser = computed(() => authStore.getters.all.value[0] || null);
 
@@ -64,4 +69,4 @@ export const isAdmin = computed(() => currentUser.value?.role === 'admin');
 
 export const getRole = computed(() => currentUser.value?.role || 'user');
 
-export const authReady = authStore.actions.me().catch(() => {});
+// export const authReady = authStore.actions.me().catch(() => {});

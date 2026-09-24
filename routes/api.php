@@ -13,7 +13,7 @@ use App\Http\Controllers\UserController;
 
 // apiresources moeten alle crud accounted for hebben
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/me', [AuthController::class, 'me']);
+
     Route::get('/users', [UserController::class, 'index']);
 
     Route::apiResource('users', UserController::class);
