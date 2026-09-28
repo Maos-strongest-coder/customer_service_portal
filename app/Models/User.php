@@ -13,6 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 use App\Models\Ticket;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 
@@ -49,7 +50,14 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
     ];
 
-        public function ticketsIssued(): HasMany
+    protected function fullName(): Attribute
+    {
+        return Attribute::get(
+            fn() => trim("$this->first_name $this->last_name")
+        );
+    }
+
+    public function ticketsIssued(): HasMany
     {
         return $this->hasMany(Ticket::class, 'issued_by_id');
     }
@@ -59,7 +67,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Ticket::class, 'issued_to_id');
     }
 
-    public function notes()
+    public function notes(): HasMany
     {
         return $this->hasMany(TicketNote::class);
     }
