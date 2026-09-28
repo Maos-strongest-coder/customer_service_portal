@@ -76,4 +76,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(TicketReply::class);
     }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === UserRole::ADMIN;
+    }
 }

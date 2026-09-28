@@ -52,4 +52,9 @@ class Ticket extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+
+    public function recipientFor(User $user): ?User
+    {
+        return $user->isAdmin() ? $this->issuedBy : $this->issueTo; 
+    }
 }

@@ -15,7 +15,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return app(UserPolicy::class)->update($this->user());
+        return app(UserPolicy::class)->update($this->user(), $this->route('user'));
     }
 
     /**
@@ -25,14 +25,19 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'first_name'   => ['sometimes', 'string', 'max:255'],
             'last_name'    => ['sometimes', 'string', 'max:255'],
             'email'        => ['sometimes', 'string', 'email', 'max:255',
                             Rule::unique('users', 'email')->ignore($this->route('user'))],
-            'role'         => ['sometimes', Rule::enum(UserRole::class)],
             'phone_number' => ['sometimes', 'nullable', 'string', 'max:255'],
         ];
+
+        if ($this->user()->isAdmin()) {
+            $rules['role'] = ['sometimes', Rule::enum(UserRole::class)];
+        }
+
+        return $rules;
     }
         
 }

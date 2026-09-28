@@ -24,9 +24,7 @@ class TicketReplyController extends Controller
 
         $reply->load(['user', 'ticket']);
 
-        $recipient = Auth::user()->role === UserRole::ADMIN
-            ? $ticket->issuedBy
-            : $ticket->issuedTo;
+        $recipient = $ticket->recipientFor(Auth::user());
 
         if ($recipient && $recipient->id !== Auth::id()) {
             $recipient->notify(new NewTicketReply($reply));
