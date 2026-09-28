@@ -22,6 +22,5 @@ const tickets = ticketStore.getters.all;
 
 onMounted(async () => {
     await ticketStore.actions.getAll();
-    console.log(tickets.value);
 });
 </script>
