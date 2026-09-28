@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Auth\Notifications\ResetPassword;
+use App\Models\User;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,5 +23,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         JsonResource::withoutWrapping();
+
+        ResetPassword::createUrlUsing(function (User $user, string $token) {
+            return url("/reset-password?token={$token}&email=" . urlencode($user->email));
+        });
     }
 }

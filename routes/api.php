@@ -9,6 +9,7 @@ use App\Http\Controllers\TicketReplyController;
 use App\Http\Controllers\TicketNoteController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
 
@@ -45,3 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 
 Route::post('/register', [RegisterController::class, 'register']);
+
+Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLink'])->name('password.email');
+
+Route::post('/reset-password', [PasswordResetController::class, 'reset'])->name('password.update');
