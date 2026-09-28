@@ -12,10 +12,6 @@ const user = computed(() => {
     return userStore.getters.getById(userId.value).value;
 });
 
-onMounted(async () => {
-    await userStore.getters.getById(userId.value);
-});
-
 watch(
     () => Navigation.currentRoute().params.id,
     async id => {
@@ -39,8 +35,11 @@ watch(
         </thead>
 
         <tbody>
-            <UserCard :user="user" mode="detail"/>
+            <UserCard v-if="user" :user="user" mode="detail" />
+
+            <tr v-else>
+                <td colspan="7">user not found...</td>
+            </tr>
         </tbody>
     </table>
 </template>
-

@@ -62,10 +62,12 @@ const saveEdit = async () => {
 const handleDelete = async () => {
     if (!confirm('Are you sure you want to delete this user?')) return;
 
-    await userStore.actions.delete(props.user.id);
+    const idToDelete = props.user.id;
+
+    await userStore.actions.delete(idToDelete);
     
     if (props.mode === 'detail') {
-        Navigation.to('users.index');
+        Navigation.to('users.overview');
     }
 };
 </script>
