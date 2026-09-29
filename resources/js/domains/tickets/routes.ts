@@ -1,7 +1,7 @@
 import Overview from './pages/Overview.vue';
 import Show from './pages/Show.vue';
 import Create from './pages/Create.vue';
-import Edit from './pages/Edit.vue';
+
 
 export const ticketRoutes = [
     {
@@ -16,11 +16,6 @@ export const ticketRoutes = [
         name: 'tickets.create',
         meta: {requiresAuth: true, requiresVerified: true},
     },
-    {
-        path: '/tickets/:id/edit',
-        component: Edit,
-        name: 'tickets.edit',
-        meta: {requiresAuth: true, requiresVerified: true},
-    },
+
     {path: '/tickets/:id', component: Show, name: 'tickets.show', meta: {requiresAuth: true, requiresVerified: true}},
 ];
