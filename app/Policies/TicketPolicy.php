@@ -15,6 +15,8 @@ class TicketPolicy
         return $user->isAdmin() || $ticket->issued_by_id === $user->id;
     }
 
+
+
     public function update(User $user, Ticket $ticket): bool
     {
         return $this->view($user, $ticket);

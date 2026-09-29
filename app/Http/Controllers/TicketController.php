@@ -43,6 +43,8 @@ class TicketController extends Controller
             'issued_by_id' => Auth::id(),
         ]);
 
+        $ticket->load(['issuedBy', 'issuedTo', 'category']);
+
         return new TicketResource($ticket);
     }
 
@@ -66,6 +68,8 @@ class TicketController extends Controller
         $this->authorize('update', $ticket);
         
         $ticket->update($request->validated());
+
+        $ticket->load(['issuedBy', 'issuedTo', 'category']);
 
         return new TicketResource($ticket);
     }

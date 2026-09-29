@@ -1,13 +1,14 @@
 <template>
     <div v-if="ticket">
-        <thead>
-            <TicketTableHeader />
-        </thead>
+        <table>
+            <thead>
+                <TicketTableHeader />
+            </thead>
 
-        <tbody>
-            <TicketCard :ticket="ticket" />
-        </tbody>
-
+            <tbody>
+                <TicketCard :ticket="ticket" mode="detail" />
+            </tbody>
+        </table>
         <template v-if="isAdmin">
             <NotesTable ref="notesTableRef" :ticketId="currentId" />
             <ChatBox placeholder="Write an internal note here..." buttonLabel="Add Note" @submit="handleAddNote" />

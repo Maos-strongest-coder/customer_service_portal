@@ -55,6 +55,6 @@ class Ticket extends Model
 
     public function recipientFor(User $user): ?User
     {
-        return $user->isAdmin() ? $this->issuedBy : $this->issueTo; 
+        return $user->isAdmin() ? $this->issuedBy : $this->issuedTo; 
     }
 }
