@@ -14,13 +14,13 @@ class RegisterController extends Controller
 {
     public function register(RegisterRequest $request)
     {
-        $data = $request->validated();
+        $credentials = $request->validated();
 
         $user = User::create([
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'first_name' => $credentials['first_name'],
+            'last_name' => $credentials['last_name'],
+            'email' => $credentials['email'],
+            'password' => Hash::make($credentials['password']),
             'role' => UserRole::USER,
         ]);
 
@@ -32,5 +32,4 @@ class RegisterController extends Controller
 
         return new UserResource($user);
     }
-    
 }

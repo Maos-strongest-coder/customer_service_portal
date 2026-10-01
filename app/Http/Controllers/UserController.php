@@ -13,18 +13,20 @@ use App\Enums\TicketStatus;
 
 class UserController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         $this->authorize('viewAny', User::class);
+
         return UserResource::collection(User::all());
     }
 
     public function show(User $user): UserResource
     {
         $this->authorize('view', $user);
+
         return new UserResource($user);
     }
-    
+
     public function update(UpdateUserRequest $request, User $user): UserResource
     {
         $this->authorize('update', $user);
@@ -34,9 +36,6 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(User $user)
     {
         $this->authorize('delete', $user);

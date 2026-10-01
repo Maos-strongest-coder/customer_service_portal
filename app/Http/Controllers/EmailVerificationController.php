@@ -12,7 +12,7 @@ class EmailVerificationController extends Controller
         if ($request->user()->hasVerifiedEmail()) {
             return response()->json([
                 'message' => 'Email already verified.'
-            ], 200);
+            ], 409);
         }
 
         $request->fulfill();
@@ -27,7 +27,7 @@ class EmailVerificationController extends Controller
         if ($request->user()->hasVerifiedEmail()) {
             return response()->json([
                 'message' => 'Email already verified.'
-            ], 400);
+            ], 409);
         }
 
         $request->user()->sendEmailVerificationNotification();

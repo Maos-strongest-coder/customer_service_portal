@@ -38,13 +38,13 @@ export const storeModuleFactory = (moduleName: string) => {
     const actions: Record<string, (...args: any[]) => Promise<any>> = {
         getAll: async () => {
             const data = await Http.get(`/${moduleName}`);
-            
+
             if (!data) return;
             setters.setAll(data);
         },
 
         getOne: async (item: any) => {
-            const data = await Http.get(`/${moduleName}/${item.id}`)
+            const data = await Http.get(`/${moduleName}/${item.id}`);
             if (!data) return;
             setters.setOne(data);
         },

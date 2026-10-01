@@ -13,7 +13,6 @@ use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
 
-// apiresources moeten alle crud accounted for hebben
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [LoginController::class, 'logout']);

@@ -2,23 +2,14 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Enums\UserRole;
 use App\Models\Ticket;
 use App\Http\Resources\TicketResource;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
-use App\Models\User;
-
-
-
 
 class TicketController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         /** @var \App\Models\User $user */
@@ -33,9 +24,6 @@ class TicketController extends Controller
         return TicketResource::collection($tickets);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreTicketRequest $request)
     {
         $ticket = Ticket::create([
@@ -48,25 +36,19 @@ class TicketController extends Controller
         return new TicketResource($ticket);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Ticket $ticket)
     {
         $this->authorize('view', $ticket);
 
         $ticket->load(['issuedBy', 'issuedTo', 'replies.user', 'category']);
-        
+
         return new TicketResource($ticket);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateTicketRequest $request, Ticket $ticket): TicketResource
     {
         $this->authorize('update', $ticket);
-        
+
         $ticket->update($request->validated());
 
         $ticket->load(['issuedBy', 'issuedTo', 'category']);
@@ -74,15 +56,12 @@ class TicketController extends Controller
         return new TicketResource($ticket);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Ticket $ticket)
     {
         $this->authorize('delete', $ticket);
 
         $ticket->delete();
-        
+
         return response()->json(['message' => 'Ticket deleted successfully']);
     }
 }

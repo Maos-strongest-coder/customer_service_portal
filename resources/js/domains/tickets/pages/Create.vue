@@ -20,7 +20,5 @@ const handleSubmit = async data => {
     await ticketStore.actions.create(data);
 
     Navigation.to('tickets.overview');
-
-
 };
 </script>

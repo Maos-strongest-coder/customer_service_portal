@@ -7,6 +7,8 @@ use App\Enums\UserRole;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
+use Illuminate\Support\Facades\Auth;
+
 
 class StoreTicketRequest extends FormRequest
 {
@@ -25,26 +27,24 @@ class StoreTicketRequest extends FormRequest
      */
     public function rules(): array
     {
-        $isAdmin = $this->user()->role === UserRole::ADMIN;
-        
         return [
             'title' => [
                 'required',
                 'string',
                 'min:1',
-                'max:255', 
+                'max:255',
             ],
             'category_id' => [
                 'required',
                 'integer',
                 'exists:categories,id'
             ],
-           'status' => [
-            $isAdmin ? 'required' : 'prohibited',
-            new Enum(TicketStatus::class)
+            'status' => [
+                $this->user()->isAdmin() ? 'required' : 'prohibited',
+                new Enum(TicketStatus::class)
             ],
             'issued_to_id' => [
-                $isAdmin ? 'required' : 'prohibited',
+                $this->user()->isAdmin() ? 'required' : 'prohibited',
                 'integer',
                 'exists:users,id',
             ],

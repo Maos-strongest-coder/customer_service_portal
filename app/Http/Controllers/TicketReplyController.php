@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\UserRole;
 use App\Http\Requests\StoreTicketReplyRequest;
 use App\Http\Resources\TicketReplyResource;
 use App\Models\Ticket;

@@ -13,9 +13,9 @@ class TicketNoteController extends Controller
 {
     public function index(Ticket $ticket)
     {
-        
+
         $this->authorize('viewAny', TicketNote::class);
-        
+
         $notes = $ticket->notes()->with('user')->get();
 
         return TicketNoteResource::collection($notes);
@@ -28,7 +28,7 @@ class TicketNoteController extends Controller
         $note = $ticket->notes()->create([...$request->validated(), 'user_id' => Auth::id()]);
 
         $note->load('user');
-        
+
         return new TicketNoteResource($note);
     }
 

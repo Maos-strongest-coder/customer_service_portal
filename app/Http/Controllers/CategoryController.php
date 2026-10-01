@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Http\Resources\CategoryResource;
 use App\Http\Requests\StoreCategoryRequest;
@@ -15,14 +14,10 @@ class CategoryController extends Controller
         $this->authorize('viewAny', Category::class);
 
         $categories = Category::all();
-        
+
         return CategoryResource::collection($categories);
     }
-    
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreCategoryRequest $request)
     {
         $this->authorize('create', Category::class);
@@ -32,11 +27,6 @@ class CategoryController extends Controller
         return new CategoryResource($category);
     }
 
-  
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateCategoryRequest $request, Category $category): CategoryResource
     {
         $this->authorize('update', $category);
@@ -46,9 +36,6 @@ class CategoryController extends Controller
         return new CategoryResource($category);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Category $category)
     {
         $this->authorize('delete', $category);
@@ -60,7 +47,7 @@ class CategoryController extends Controller
         }
 
         $category->delete();
-        
+
         return response()->json(['message' => 'Category deleted successfully']);
     }
 }
